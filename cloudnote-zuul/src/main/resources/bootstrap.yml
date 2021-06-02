@@ -1,6 +1,6 @@
 spring:
   application:
-    name: cloudnote-zuul
+    name: cloudnote-zuul000
   cloud:
     config:
       uri: http://127.0.0.1:8888
