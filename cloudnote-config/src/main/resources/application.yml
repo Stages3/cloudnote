@@ -9,7 +9,7 @@ spring:
       server:
         git:
           uri: https://github.com/Stages3/cloudnote
-          default-label: master
+          default-label: main
           search-paths: cn-config
 
 eureka:
