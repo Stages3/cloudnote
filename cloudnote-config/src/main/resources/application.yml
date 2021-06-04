@@ -8,7 +8,7 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/Stages3/cloudnote
+          uri: https://github.com/Stages3/cloudnote-config
           default-label: main
           search-paths: config
 
