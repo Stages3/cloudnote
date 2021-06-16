@@ -2,24 +2,25 @@ package com.yc.cloudnote.bean;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-/**
- * @description:  笔记本表
- * @author:
- * @create: 2021-06-05 16:32
- */
 @Data
-@Table
 @Entity
-public class Notebook {
+@Table
+
+public class Notebook implements Serializable {
+    private static final long serialVersionUID = 1581523235029787459L;
     @Id
-    private Integer notebookid;             //'笔记本ID',
-    private Integer userid;                 //'用户ID',
-    private String notebookname;            //'笔记本名',
-    private String notebookdesc;            //'笔记本说明',
-    private Timestamp notebookcreatetime;   //
+    private Integer notebookid;
+    private Integer userid;
+    private String notebookname;
+    private String notebookdesc;
+    private Timestamp notebookcreatetime;
+
+//    @OneToOne
+//    @JoinColumn(name="userid")
+//    private User user;
+
 }

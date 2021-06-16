@@ -1,285 +1,465 @@
-/*
- * 笔记的加载
+/***
+ * 加载普通笔记
  */
-//加载笔记本相关的笔记
-function loadBookNotes(){
-	//设置选中效果
-	$("#book_ul a").removeClass("checked");
-	$(this).find("a").addClass("checked");				
-	//获取参数
-	var bookId=$(this).data("bookId");
-	//发送ajax请求
+function getNormalNoteList(noteBookId){
 	$.ajax({
-		url:base_path+"/note/loadnotes.do",
 		type:"post",
-		data:{"bookId":bookId},
+		url:basePath+"note/findNote.do",
 		dataType:"json",
-		success:function(result){
-			//获取笔记信息
-			var notes=result.data;//(List集合中存储)
-			//清除原来的列表信息
-			$("#note_ul").empty();
-			//循环添加li
-			for(var i=0;i<notes.length;i++){
-				//获取笔记ID
-				var noteId=notes[i].cn_note_id;
-				//获取笔记主题
-				var noteTitle=notes[i].cn_note_title;
-				//生成笔记li
-				createNoteLi(noteId,noteTitle);
+		data:{"noteBookId":noteBookId},
+		success:function(result) {
+			if(result.status==0) {
+				var list = result.data;
+				$(list).each(function(){
+					var li = '<li class="online"><a><i class="fa fa-file-text-o" title="online" rel="tooltip-bottom"></i> ' + this.cn_note_title + '<button type="button" class="btn btn-default btn-xs btn_position btn_slide_down"><i class="fa fa-chevron-down"></i></button></a><div class="note_menu" tabindex="-1"><dl><dt><button type="button" class="btn btn-default btn-xs btn_move" title="移动至..."><i class="fa fa-random"></i></button></dt><dt><button type="button" class="btn btn-default btn-xs btn_share" title="分享"><i class="fa fa-sitemap"></i></button></dt><dt><button type="button" class="btn btn-default btn-xs btn_delete" title="删除"><i class="fa fa-times"></i></button></dt></dl></div></li>';
+					$("#second_side_right ul").append(li);
+					$("#second_side_right ul li:last").data("note",this);
+				});
+			} else {
+				alert(result.message);
 			}
 		},
-		error:function(){
-			alert("获取失败");
+		error:function(xhr,status,error) {
+			alert("请求失败.");
 		}
 	});
-};
-
-//生成笔记li
-function createNoteLi(noteId,noteTitle){
-	var sli="";
-	sli+='<li class="online">';
-	sli+='<a>';
-	sli+='<i class="fa fa-file-text-o" title="online" rel="tooltip-bottom"></i>';
-	sli+=noteTitle;
-	sli+='<button type="button" class="btn btn-default btn-xs btn_position btn_slide_down"><i class="fa fa-chevron-down"></i></button>';	
-	sli+='</a>';
-	sli+='<div class="note_menu" tabindex="-1">';
-	sli+='<dl>';
-	sli+='<dt><button type="button" class="btn btn-default btn-xs btn_move" title="移动至..."><i class="fa fa-random"></i></button></dt>';		
-	sli+='<dt><button type="button" class="btn btn-default btn-xs btn_share" title="分享"><i class="fa fa-sitemap"></i></button></dt>';		
-	sli+='<dt><button type="button" class="btn btn-default btn-xs btn_delete" title="删除"><i class="fa fa-times"></i></button></dt>';		
-	sli+='</dl>';	
-	sli+='</div>';
-	sli+='</li>';
-	//将字符串转换为jquery对象
-	var $li=$(sli);
-	//保存noteId
-	$li.data("noteId",noteId);
-	//将li添加到ul中
-	$("#note_ul").append($li);
 }
-//笔记信息的标题与内容的显示
-function loadNote(){
-	//设置选中效果
-	$("#note_ul a").removeClass("checked");
-	$(this).find("a").addClass("checked");
-	//获取请求参数
-	var noteId=$(this).data("noteId");
-	//发送ajax请求
+
+/***
+ * 查询普通笔记内容
+ */
+function getNoteDetail(noteId){
 	$.ajax({
-		url:base_path+"/note/load.do",
 		type:"post",
+		url:basePath+"note/findNoteDetail.do",
+		dataType:"json",
 		data:{"noteId":noteId},
-		dataType:"json",
-		success:function(result){
-			if(result.status==0){
-				//获取笔记的标题
-				var title=result.data.cn_note_title;
-				//获取返回的笔记内容
-				var body=result.data.cn_note_body;
-				//设置页面中笔记标题
-				$("#input_note_title").val(title);
-				//设置笔记内容
-				um.setContent(body);
+		success:function(result) {
+			if(result.status==0) {
+				var note = result.data;
+				$("#input_note_title").val(note.cn_note_title);
+				um.setContent(note.cn_note_body==null?"":note.cn_note_body);
+			} else {
+				alert(result.message);
 			}
 		},
-		error:function(){
-			alert("加载笔记信息失败");
+		error:function(xhr,status,error) {
+			alert("请求失败.");
 		}
 	});
-};
+}
 
-//更新笔记信息（保存笔记）事件
-function updateNote() {
-	//获取参数
-	var $li=$("#note_ul a.checked").parent();
-	//获取笔记Id
-	var noteId=$li.data("noteId");
-	//获取笔记的标题和内容
-	var noteTitle=$("#input_note_title").val().trim();
-	var noteBody=um.getContent();
-	//发送ajax请求
+/***
+ * 创建普通笔记
+ */
+function createNormalNote(noteBookId, noteBookName){
 	$.ajax({
-		url:base_path+"/note/update.do",
 		type:"post",
-		data:{"noteId":noteId,"title":noteTitle,"body":noteBody},
+		url:basePath+"note/addNote.do",
 		dataType:"json",
-		success:function(result){
-			if(result.status==0){
-				var str="";
-				str+='<i class="fa fa-file-text-o" title="online" rel="tooltip-bottom"></i>';
-				str+=noteTitle;
-				str+='<button type="button" class="btn btn-default btn-xs btn_position btn_slide_down"><i class="fa fa-chevron-down"></i></button>';	
-				//将str替换到li的a元素中
-				$li.find("a").html(str);
-				//提示成功
-				alert(result.msg);
+		data:{"cn_notebook_id":noteBookId,"cn_note_title":noteBookName},
+		success:function(result) {
+			if(result.status==0) {
+				var note = result.data;
+				var li = '<li class="online"><a><i class="fa fa-file-text-o" title="online" rel="tooltip-bottom"></i> ' + note.cn_note_title + '<button type="button" class="btn btn-default btn-xs btn_position btn_slide_down"><i class="fa fa-chevron-down"></i></button></a><div class="note_menu" tabindex="-1"><dl><dt><button type="button" class="btn btn-default btn-xs btn_move" title="移动至..."><i class="fa fa-random"></i></button></dt><dt><button type="button" class="btn btn-default btn-xs btn_share" title="分享"><i class="fa fa-sitemap"></i></button></dt><dt><button type="button" class="btn btn-default btn-xs btn_delete" title="删除"><i class="fa fa-times"></i></button></dt></dl></div></li>';
+				$("#second_side_right ul").prepend(li);
+				$("#second_side_right ul li:first").data("note",note);
+				$(".close,.cancle").trigger("click");
+			} else {
+				alert(result.message);
 			}
 		},
-		error:function(){
-			alert("保存笔记失败");
+		error:function(xhr,status,error) {
+			alert("请求失败.");
 		}
 	});
-};
+}
 
-//创建笔记按钮的点击事件
-function addNote(){
-	//获取请求参数
-	//获取笔记标题
-	var title=$("#input_note").val().trim();
-	//获取用户ID
-	var userId=getCookie("userId");
-	//获取笔记本ID
-	var $li=$("#book_ul a.checked").parent();
-	var bookId=$li.data("bookId");
-	//数据格式检查
-	var ok=true;
-	if(title==""){//判断是否为空
-		ok=false;
-		$("#title_span").html("标题不能为空");
-	}
-	if(userId==null){//检查是否生效
-		ok=false;
-		window.location.href="log_in.html";
-	}
-	if(ok){
-		//发送ajax请求
-		$.ajax({
-			url:base_path+"/note/add.do",
-			type:"post",
-			data:{"userId":userId,"bookId":bookId,"title":title},
-			dataType:"json",
-			success:function(result){
-				var note=result.data;
-				if(result.status==0){
-					var id=note.cn_note_id;
-					var title=note.cn_note_title;
-					createNoteLi(id,title);
-					alert(result.msg);
-				}
-			},
-			error:function(){
-				alert("创建笔记失败");
-			}
-		});
-	}
-};
-//分享笔记的点击事件
-function shareNotes(){
-	//获取请求参数
-	$li=$(this).parents("li");
-	var noteId=$li.data("noteId");
-	//发送ajax请求
+/***
+ * 更新普通笔记
+ */
+function updateNormalNote(note,noteDom){
 	$.ajax({
-		url:base_path+"/share/add.do",
 		type:"post",
+		url:basePath+"note/updateNote.do",
+		dataType:"json",
+		data:note,
+		success:function(result) {
+			if(result.status==0) {
+				noteDom.children(".checked").html('<i class="fa fa-file-text-o" title="online" rel="tooltip-bottom"></i> ' + note.cn_note_title + '<button type="button" class="btn btn-default btn-xs btn_position btn_slide_down"><i class="fa fa-chevron-down"></i></button>');
+				$("footer div strong").text("保存成功").parent().fadeIn(100);
+				setTimeout(function(){
+					$("footer div").fadeOut(500);
+				}, 1500);
+				//$(".close,.cancle").trigger("click");
+			} else {
+				alert(result.message);
+			}
+		},
+		error:function(xhr,status,error) {
+			alert("请求失败.");
+		}
+	});
+}
+
+/***
+ * 删除普通笔记
+ */
+function deleteNormalNote(noteId, dom){
+	$.ajax({
+		type:"post",
+		url:basePath+"note/deleteNote.do",
+		dataType:"json",
 		data:{"noteId":noteId},
-		dataType:"json",
-		success:function(result){
-			var noteTitle=$li.text();
-			var sli="";
-			sli+='<i class="fa fa-file-text-o" title="online" rel="tooltip-bottom"></i>';
-			sli+=noteTitle;
-			sli+='<i class="fa fa-sitemap"></i>'
-			sli+='<button type="button" class="btn btn-default btn-xs btn_position btn_slide_down"><i class="fa fa-chevron-down"></i></button>';	
-			//将笔记li元素的<a>标记内容提花
-			$li.find("a").html(sli);
-			alert("笔记分享成功");
-		},
-		error:function(){
-			alert("分享笔记失败!");
-		}
-	});
-};
-
-//分页加载搜索分享的笔记
-//发送ajax请求
-function searchSharePage(keyword,page){
-	$.ajax({
-		url:base_path+"/share/search.do",
-		type:"post",
-		data:{"keyword":keyword,"page":page},
-		dataType:"json",
-		success:function(result){
-			if(result.status==0){
-				//获取服务器返回的搜索结果
-				var shares=result.data;
-				//循环解析生成列表li元素
-				 //循环解析生成列表li元素
-				 for(var i=0;i<shares.length;i++){
-					 var shareId = shares[i].cn_share_id;//分享ID
-					 var shareTitle =shares[i].cn_share_title; //分享标题
-					 //生成一个li
-					 var sli = "";
-					 sli+='<li class="online">';
-					 sli+='	<a>';
-					 sli+='		<i class="fa fa-file-text-o" title="online" rel="tooltip-bottom"></i>';
-					 sli+= shareTitle;
-					 sli+='		<button type="button" class="btn btn-default btn-xs btn_position btn_slide_down"><i class="fa fa-star"></i></button>';
-					 sli+='	</a>';
-					 sli+='</li>';
-					 var $li = $(sli);
-				     $li.data("shareId",shareId);
-					 //添加到搜索结果ul中
-					 $("#pc_part_6 ul").append($li);
-				 }
+		success:function(result) {
+			if(result.status==0) {
+				dom.remove();
+				//清除笔记内容
+				$("#input_note_title").val("");
+				um.setContent("");
+				$('.close,.cancle').trigger('click');
+			} else {
+				alert(result.message);
 			}
 		},
-		error:function(){
-			alert("搜索失败");
+		error:function(xhr,status,error) {
+			alert("请求失败.");
 		}
 	});
-};
-//查看搜索结果列表的笔记信息
-function load_share(){
-	 //获取请求参数
-	 var shareId = $(this).data("shareId");
-	 //发送Ajax请求
-	 $.ajax({
-		 url:base_path+"/note/load_share.do",
-		 type:"post",
-		 data:{"shareId":shareId},
-		 dataType:"json",
-		 success:function(result){
-			 if(result.status==0){
-				 var title = result.data.cn_share_title;//获取分享标题
-				 var body =	result.data.cn_share_body; //获取分享内容
-				 //设置标题和内容
-				 $("#noput_note_title").html(title);
-				 $("#noput_note_title").next().html(body);
-				 //切换显示
-				 $("#pc_part_3").hide();
-				 $("#pc_part_5").show();
-			 }
-		 },
-		 error:function(){
-			 alert("加载笔记信息异常");
-		 }
-	 });
- };
- 
-//删除笔记
- function deleteNote(){
- 	 //获取请求参数
- 	 var $li =$("#note_ul a.checked").parent();
- 	 var noteId = $li.data("noteId");
- 	 //发送Ajax请求
- 	 $.ajax({
- 		 url:base_path+"/note/delete.do",
- 		 type:"post",
- 		 data:{"noteId":noteId},
- 		 dataType:"json",
- 		 success:function(result){
- 			 if(result.status==0){
- 				 //删除li
- 				 $li.remove();
- 				 //提示成功
- 				 alert(result.msg);
- 			 }
- 		 },
- 		 error:function(){
- 			 alert("删除笔记异常");
- 		 }
- 	 });
-  };
+}
+
+/***
+ * 移动笔记
+ */
+function moveNote(noteId, noteBookId, dom){
+	$.ajax({
+		type:"post",
+		url:basePath+"note/moveNote.do",
+		dataType:"json",
+		data:{"noteId":noteId,"noteBookId":noteBookId},
+		success:function(result) {
+			if(result.status==0) {
+				dom.remove();
+				//清除笔记内容
+				$("#input_note_title").val("");
+				um.setContent("");
+				//清除回收站笔记内容
+				$("#fifth_side_right .contact-body").html('<h4 id="noput_note_title"></h4>');
+				$('.close,.cancle').trigger('click');
+			} else {
+				alert(result.message);
+			}
+		},
+		error:function(xhr,status,error) {
+			alert("请求失败.");
+		}
+	});
+}
+
+/***
+ * 分享笔记
+ */
+function createShareNote(noteId){
+	$.ajax({
+		type:"post",
+		url:basePath+"note/shareNote.do",
+		dataType:"json",
+		data:{"noteId":noteId},
+		success:function(result) {
+			if(result.status==0) {
+				$("footer div strong").text("分享成功").parent().fadeIn(100);
+				setTimeout(function(){
+					$("footer div").fadeOut(500);
+				}, 1500);
+			} else {
+				alert(result.message);
+			}
+		},
+		error:function(xhr,status,error) {
+			alert("请求失败.");
+		}
+	});
+}
+
+/***
+ * 查询回收站笔记列表
+ */
+function getRecycleNoteList(noteBookId){
+	$.ajax({
+		type:"post",
+		url:basePath+"note/findNote.do",
+		dataType:"json",
+		data:{"noteBookId":noteBookId},
+		success:function(result) {
+			if(result.status==0) {
+				var notes = result.data;
+				$(notes).each(function(){
+					var li = '<li class="disable"><a ><i class="fa fa-file-text-o" title="online" rel="tooltip-bottom"></i> '+this.cn_note_title+'<button type="button" class="btn btn-default btn-xs btn_position btn_delete"><i class="fa fa-times"></i></button><button type="button" class="btn btn-default btn-xs btn_position_2 btn_replay"><i class="fa fa-reply"></i></button></a></li>';
+					$("#four_side_right ul").append(li);
+					$("#four_side_right ul li:last").data("note",this);
+				});
+			} else {
+				alert(result.message);
+			}
+		},
+		error:function(xhr,status,error) {
+			alert("请求失败.");
+		}
+	});
+}
+
+/***
+ * 查看回收站笔记内容
+ */
+function getRecycleNoteDetail(noteId) {
+	$.ajax({
+		type:"post",
+		url:basePath+"note/findNoteDetail.do",
+		dataType:"json",
+		data:{"noteId":noteId},
+		success:function(result) {
+			if(result.status==0) {
+				var note = result.data;
+				$("#fifth_side_right .contact-body").html('<h4 id="noput_note_title">标题：'+note.cn_note_title+'</h4>');
+				$("#fifth_side_right .contact-body").append(note.cn_note_body);
+			} else {
+				alert(result.message);
+			}
+		},
+		error:function(xhr,status,error) {
+			alert("请求失败.");
+		}
+	});
+}
+
+/***
+ * 删除回收站笔记
+ */
+function deleteRecycleNote(noteId,dom){
+	$.ajax({
+		type:"post",
+		url:basePath+"note/deleteRecycleNote.do",
+		dataType:"json",
+		data:{"noteId":noteId},
+		success:function(result) {
+			if(result.status==0) {
+				dom.remove();
+				//清除回收站笔记内容
+				$("#fifth_side_right .contact-body").html('<h4 id="noput_note_title"></h4>');
+				$('.close,.cancle').trigger('click');
+			} else {
+				alert(result.message);
+			}
+		},
+		error:function(xhr,status,error) {
+			alert("请求失败.");
+		}
+	});
+}
+
+/***
+ * 搜索分享笔记列表
+ */
+function getShareNoteList(searchKey,currentPage){
+	$.ajax({
+		type:"post",
+		url:basePath+"note/searchShareNote.do",
+		dataType:"json",
+		data:{"searchKey":searchKey,"currentPage":currentPage},
+		success:function(result) {
+			if(result.status==0) {
+				$('#pc_part_2,#pc_part_3,#pc_part_4,#pc_part_7,#pc_part_8').hide();
+				$('#pc_part_6,#pc_part_5').show();
+				//$('#sixth_side_right ul').empty();
+				//循环对象取值
+				var shares = result.data;
+				$(shares).each(function(){
+					$('#sixth_side_right ul').append('<li class="online"><a href="#"><i class="fa fa-file-text-o" title="online" rel="tooltip-bottom"></i> '+this.cn_share_title+'<button type="button" class="btn btn-default btn-xs btn_position btn_like"><i class="fa fa-star-o"></i></button><div class="time"></div></a></li>');
+					$('#sixth_side_right ul li:last').data("share",this);
+				});
+				$('#first_side_right li a').removeClass('checked');
+				$('#like_button,#action_button,#rollback_button').removeClass('clicked');
+				$(this).addClass('clicked');
+			} else {
+				alert(result.message);
+			}
+		},
+		error:function(xhr,status,error) {
+			alert("请求失败.");
+		}
+	});
+}
+
+/***
+ * 查询分享笔记内容
+ */
+function getShareNoteDetail(shareId){
+	$.ajax({
+		type:"post",
+		url:basePath+"note/findShareNoteDetail.do",
+		dataType:"json",
+		data:{"shareId":shareId},
+		success:function(result) {
+			if(result.status==0) {
+				var share = result.data;
+				$("#fifth_side_right .contact-body").html('<h4 id="noput_note_title">标题：'+share.cn_share_title+'</h4>');
+				$("#fifth_side_right .contact-body").append(share.cn_share_body);
+			} else {
+				alert(result.message);
+			}
+		},
+		error:function(xhr,status,error) {
+			alert("请求失败.");
+		}
+	});
+}
+
+/***
+ * 收藏分享笔记
+ */
+function likeShareNote(shareId,dom){
+	$.ajax({
+		type:"post",
+		url:basePath+"note/likeShareNote.do",
+		dataType:"json",
+		data:{"shareId":shareId},
+		success:function(result) {
+			if(result.status==0) {
+				dom.remove();
+			} else {
+				alert(result.message);
+			}
+		},
+		error:function(xhr,status,error) {
+			alert("请求失败.");
+		}
+	});
+	$('.close,.cancle').trigger('click');
+}
+
+/***
+ * 加载收藏笔记
+ */
+function getLikeNoteList(likeNoteId){
+	$.ajax({
+		type:"post",
+		url:basePath+"note/findNote.do",
+		dataType:"json",
+		data:{"noteBookId":likeNoteId},
+		success:function(result) {
+			if(result.status==0) {
+				var list = result.data;
+				$(list).each(function(){
+					var li = '<li class="idle"><a ><i class="fa fa-file-text-o" title="online" rel="tooltip-bottom"></i> '+this.cn_note_title+'<button type="button" class="btn btn-default btn-xs btn_position btn_delete"><i class="fa fa-times"></i></button></a></li>';
+					$("#seventh_side_right ul").append(li);
+					$("#seventh_side_right ul li:last").data("note",this);
+				});
+			} else {
+				alert(result.message);
+			}
+		},
+		error:function(xhr,status,error) {
+			alert("请求失败.");
+		}
+	});
+}
+
+/***
+ * 查看收藏笔记内容
+ */
+function getLikeNoteDetail(noteId) {
+	$.ajax({
+		type:"post",
+		url:basePath+"note/findNoteDetail.do",
+		dataType:"json",
+		data:{"noteId":noteId},
+		success:function(result) {
+			if(result.status==0) {
+				var note = result.data;
+				$("#fifth_side_right .contact-body").html('<h4 id="noput_note_title">标题：'+note.cn_note_title+'</h4>');
+				$("#fifth_side_right .contact-body").append(note.cn_note_body);
+			} else {
+				alert(result.message);
+			}
+		},
+		error:function(xhr,status,error) {
+			alert("请求失败.");
+		}
+	});
+}
+
+/***
+ * 删除收藏笔记
+ */
+function deleteLikeNote(noteId,dom){
+	$.ajax({
+		type:"post",
+		url:basePath+"note/deleteNote.do",
+		dataType:"json",
+		data:{"noteId":noteId},
+		success:function(result) {
+			if(result.status==0) {
+				dom.remove();
+				//清除回收站笔记内容
+				$("#fifth_side_right .contact-body").html('<h4 id="noput_note_title"></h4>');
+				$('.close,.cancle').trigger('click');
+			} else {
+				alert(result.message);
+			}
+		},
+		error:function(xhr,status,error) {
+			alert("请求失败.");
+		}
+	});
+}
+
+/***
+ * 加载本用户参加活动笔记列表
+ */
+function getNoteActivityList(noteBookId){
+	$.ajax({
+		type:"post",
+		url:basePath+"note/findNote.do",
+		dataType:"json",
+		data:{"noteBookId":noteBookId},
+		success:function(result) {
+			if(result.status==0) {
+				var list = result.data;
+				$(list).each(function(){
+					var li = '<li class="offline"><a ><i class="fa fa-file-text-o" title="online" rel="tooltip-bottom"></i> '+this.cn_note_title+'</a></li>';
+					$("#eighth_side_right ul").append(li);
+					$("#eighth_side_right ul li:last").data("note",this);
+				});
+			} else {
+				alert(result.message);
+			}
+		},
+		error:function(xhr,status,error) {
+			alert("请求失败.");
+		}
+	});
+}
+
+/***
+ * 查询参加活动的笔记内容
+ */
+function getActivityNoteDetail(noteId) {
+	$.ajax({
+		type:"post",
+		url:basePath+"note/findNoteDetail.do",
+		dataType:"json",
+		data:{"noteId":noteId},
+		success:function(result) {
+			if(result.status==0) {
+				var note = result.data;
+				$("#fifth_side_right .contact-body").html('<h4 id="noput_note_title">标题：'+note.cn_note_title+'</h4>');
+				$("#fifth_side_right .contact-body").append(note.cn_note_body);
+			} else {
+				alert(result.message);
+			}
+		},
+		error:function(xhr,status,error) {
+			alert("请求失败.");
+		}
+	});
+}
