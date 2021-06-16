@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--namespace命名空间 -》接口完全限定名 -》 和接口直接绑定-->
+<mapper namespace="com.yc.cloudnotenote.dao.INoteBookMapper">
+    <!--    select 标签== @select  resultType 设定返回的实体类类型
+    id 要对应 接口中的方法名
+    -->
+    <select id="selectByUserId" resultType="com.yc.cloudnotenote.bean.Notebook">
+        select * from notebook where userid= #{userid}
+    </select>
+
+    <delete id="deleteNotebookById" parameterType="com.yc.cloudnotenote.bean.Notebook">
+        delete from notebook where notebookid=#{notebookid}
+    </delete>
+
+</mapper>

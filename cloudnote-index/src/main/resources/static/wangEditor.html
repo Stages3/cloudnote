@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>
+    <script src="/webjars/vue/2.5.16/dist/vue.min.js"></script>
+    <script src="/webjars/axios/0.21.1/dist/axios.min.js"></script>
+</head>
+<body>
+<form enctype="multipart/form-data" method="post">
+<div id="div1" v-for="note in notes" v-if="note.notetitle=='今日心情'">
+
+    <p v-html="note.notebody"></p>
+
+
+</div>
+    <button type="submit" @click="huoqu"> 获取</button>
+</form>
+</body>
+<script type="text/javascript">
+    const SINA_URL_PATH = 'http://img.t.sinajs.cn/t4/appstyle/expression/ext/normal'
+    const E = window.wangEditor
+    const editor = new E('#div1')
+    // 或者 const editor = new E( document.getElementById('div1') )
+    editor.config.fontNames = [
+        // 对象形式 v4.6.16
+        {name:"黑体",value:"黑体"},
+        {name:"绝绝字体",value:"Times New Roman"},
+        // 字符串形式
+        '黑体',
+        '仿宋',
+        '楷体',
+        '标楷体',
+        '华文仿宋',
+        '华文楷体',
+        '宋体',
+        '微软雅黑',
+        'Arial',
+        'Tahoma',
+        'Verdana',
+        'Times New Roman',
+        'Courier New'
+    ]
+    //表情配置
+    editor.config.emotions = [
+        {
+            title: '新浪', // tab 的标题
+            type: 'image', // 'emoji' 或 'image' ，即 emoji 形式或者图片形式
+            content: [
+                { alt: '[坏笑]', src: `${SINA_URL_PATH}/50/pcmoren_huaixiao_org.png` },
+                { alt: '[舔屏]', src: `${SINA_URL_PATH}/40/pcmoren_tian_org.png` },
+                { alt: '[污]', src: `${SINA_URL_PATH}/3c/pcmoren_wu_org.png` }
+            ]
+        },
+        {
+            title: 'emoji',  // tab 的标题
+            type: 'emoji', // 'emoji' / 'image'
+            // emoji 表情，content 是一个数组即可
+            content: '😀 😃 😄 😁 😆 😅 😂 😊 😇 🙂 🙃 😉 😓 😪 😴 🙄 🤔 😬 🤐'.split(/\s/)
+        }
+    ]
+    //
+    editor.config.uploadImgServer = '/upload-img'
+    // editor.config.uploadImgShowBase64 =true
+
+    // 插入网络图片的回调
+    editor.config.linkImgCallback = function (src,alt,href) {
+
+        console.log('图片 src ', src)
+        console.log('图片文字说明',alt)
+        console.log('跳转链接',href)
+    }
+
+
+    // 配置alt选项
+    editor.config.showLinkImgAlt = false
+    // 配置超链接
+    editor.config.showLinkImgHref = true
+
+    editor.create()
+    editor.txt.append('<p>追加的内容</p>')
+    console.log(editor.txt.text());
+    // console.log(editor.txt.getJSON());
+    // editor.config.onblur = function (newHtml) {
+    //     console.log('onblur', newHtml) // 获取最新的 html 内容
+    // }
+    editor.config.onfocus = function (newHtml) {
+        console.log('onfocus', newHtml) // 获取最新的 html 内容
+    }
+    // 配置 onchange 回调函数
+    editor.config.onchange = function (newHtml) {
+        console.log('change 之后最新的 html', newHtml)
+
+    }
+    // 配置触发 onchange 的时间频率，默认为 200ms
+    // editor.config.onchangeTimeout = 500 // 修改为 500ms
+    console.log(editor.txt.text());
+
+    editor.config.uploadImgHooks = {
+        // 上传图片之前
+        before: function(xhr) {
+            console.log(xhr)
+
+            // 可阻止图片上传
+            return {
+                prevent: true,
+                msg: '需要提示给用户的错误信息'
+            }
+        },
+        // 图片上传并返回了结果，图片插入已成功
+        success: function(xhr) {
+            console.log('success', xhr)
+        },
+        // 图片上传并返回了结果，但图片插入时出错了
+        fail: function(xhr, editor, resData) {
+            console.log('fail', resData)
+        },
+        // 上传图片出错，一般为 http 请求的错误
+        error: function(xhr, editor, resData) {
+            console.log('error', xhr, resData)
+        },
+        // 上传图片超时
+        timeout: function(xhr) {
+            console.log('timeout')
+        },
+        // 图片上传并返回了结果，想要自己把图片插入到编辑器中
+        // 例如服务器端返回的不是 { errno: 0, data: [...] } 这种格式，可使用 customInsert
+        customInsert: function(insertImgFn, result) {
+            // result 即服务端返回的接口
+            console.log('customInsert', result)
+
+            // insertImgFn 可把图片插入到编辑器，传入图片 src ，执行函数即可
+            insertImgFn(result.data[0])
+        }
+    }
+    
+    // var v=new Vue({
+    //     el:"#div1",
+    //     data:{
+    //         notename:""
+    //     },
+    //     methods:{
+    //         huoqu:function () {
+    //             console.log(editor.txt.text());
+    //             console.log(this.notename);
+    //         }
+    //     }
+    // })
+</script>
+<script>
+    // let v=new Vue({
+    //     el:"#div",
+    //     data:{
+    //         notes:[]
+    //     },
+    //     created(){
+    //         axios.get("http://127.0.0.1/cloudnote-notebook/findAllNote").then(res=>{
+    //             if(res.data.code=1){
+    //                 this.notes=res.data.data;
+    //             }
+    //         })
+    //
+    //     }
+    // })
+</script>
+</html>
