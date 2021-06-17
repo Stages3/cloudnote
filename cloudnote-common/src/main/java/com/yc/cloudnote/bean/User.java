@@ -14,8 +14,10 @@ import java.io.Serializable;
  * @author:
  * @create: 2021-06-05 16:32
  */
-@Entity
+
 @Data
+@Table
+@Entity
 public class User implements Serializable {
     @Id
     private Integer userid;

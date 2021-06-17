@@ -35,4 +35,5 @@ public class UserAction {
             //
             return Result.failure(e.getMessage(), errors.getAllErrors());
         }
-    }}
+    }
+}
