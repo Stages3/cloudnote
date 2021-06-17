@@ -1,280 +1,159 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title>活动详情</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="x-pjax-version" content="v173">
-        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/favico-144-precomposed.png">
-        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/favico-114-precomposed.png">
-        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/favico-72-precomposed.png">
-        <link rel="apple-touch-icon-precomposed" href="ico/favico-57-precomposed.png">
-        <link rel="shortcut icon" href="ico/favico.png">
-        <link rel="shortcut icon" href="ico/favico.ico">
-        <link rel="stylesheet" href="styles/icon.css"/>
-        <link rel="stylesheet" href="styles/main.css"/>
-		<!-- Google-Code代码高亮CSS -->
-        <link rel="stylesheet" href="styles/prettify.css"/>
-		<script src="/webjars/vue/2.5.16/dist/vue.min.js"></script>
-		<script src="/webjars/axios/0.21.1/dist/axios.min.js"></script>
+<head>
+	<meta charset="utf-8">
+	<title>活动详情</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="x-pjax-version" content="v173">
+	<link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/favico-144-precomposed.png">
+	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/favico-114-precomposed.png">
+	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/favico-72-precomposed.png">
+	<link rel="apple-touch-icon-precomposed" href="ico/favico-57-precomposed.png">
+	<link rel="shortcut icon" href="ico/favico.png">
+	<link rel="shortcut icon" href="ico/favico.ico">
+	<link rel="stylesheet" href="styles/icon.css"/>
+	<link rel="stylesheet" href="styles/main.css"/>
+	<!-- Google-Code代码高亮CSS -->
+	<link rel="stylesheet" href="styles/prettify.css"/>
+	<script src="/webjars/vue/2.5.16/dist/vue.min.js"></script>
+	<script src="/webjars/axios/0.21.1/dist/axios.min.js"></script>
 
-    </head>
-    <body class="animated fadeIn" >
-        <header class="header">
-            <div class="header-brand">
-                <a data-pjax=".content-body" href="index.html">
-                    <img class="brand-logo" src="images/dummy/8986f28e.stilearn-logo.png" alt="Stilearn Admin Sample Logo">
-                </a>
-            </div>
-            <div class="header-profile">
-                <div class="profile-nav">
-                    <span class="profile-username">Leo</span>
-                    <a  class="dropdown-toggle" data-toggle="dropdown">
-                        <span class="fa fa-angle-down"></span>
-                    </a>
-                    <ul class="dropdown-menu animated flipInX pull-right" role="menu">
-                        <li><a href="change_password.html"><i class="fa fa-user"></i> 修改密码</a></li>
-                        <li class="divider"></li>
-                        <li><a id="logout" href="#" ><i class="fa fa-sign-out"></i> 退出登录</a></li>
-                    </ul>
-                </div>
-            </div>
-            <form role="form" class="form-inline">
-                <button type="button" class="btn btn-default btn-expand-search"><i class="fa fa-search"></i></button>
-                <div class="toggle-search">
-                    <input type="text" class="form-control" placeholder="搜索笔记">    
-                    <button type="button" class="btn btn-default btn-collapse-search"><i class="fa fa-times"></i></button>
-                </div>
-            </form>
-            <ul class="hidden-xs header-menu pull-right">
-                <li>
-                    <a href="activity.html" title="笔记活动">活动</a>
-                </li>
-            </ul>
-        </header>
-
-		<div class="row" style='padding:0;' id="details" >
-			<!-- alert_background-->
-			<div class="opacity_bg"></div>
-			<div id="can"></div>
-			<!-- alert_like -->
-			<div class="modal fade in" id="modalBasic_14" tabindex="-1" role="dialog" aria-labelledby="modalBasicLabel" aria-hidden="false" style="display: none;">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-							<h4 class="modal-title" id="modalBasicLabel_4">收藏笔记</h4>
-						</div>
-						<div class="modal-body">
-							<div class="form-group">
-                               <p> 笔记将被默认收藏至<strong>收藏笔记本</strong>，是否继续收藏？</p>
-                            </div>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-default cancle" data-dismiss="modal">取 消</button>
-							<button type="button" class="btn btn-primary sure">收 藏</button>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- alert_like -->
-			<!-- join_activity -->
-			<div class="modal fade in" id="modalBasic_15" tabindex="-1" role="dialog" aria-labelledby="modalBasicLabel" aria-hidden="false" style='display: none;'>
-				<div class="modal-dialog" style='width:50%;margin:5% auto 0;'>
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-							<h4 class="modal-title" id="modalBasicLabel_5">选择参加活动的笔记</h4>
-						</div>
-						<div class="modal-body clear_margin">
-							<div class="row">
-								<!-- 选择笔记本 -->
-								<div class="col-xs-5" style='padding:0;border-right:1px solid #E0E4E8;'>
-									<aside class="side-right" id='select_notebook'>
-										<div class="module" data-toggle="niceScroll">
-											<div class="chat-contact">
-												<div class="contact-body">
-													<ul class="contacts-list">
-														<li class="online"><a ><i class="fa fa-book" title="online" rel="tooltip-bottom"></i> 默认笔记本</a></li>
-													</ul>
-												</div>
-											</div>
-										</div>
-									</aside>					
-								</div>
-								<!-- 选择笔记本 -->
-								<!-- 选择笔记 -->
-								<div class="col-xs-7" style='padding:0;'>
-									<aside class="side-right" id='select_note'>
-										<div class="module" data-toggle="niceScroll">
-											<div class="chat-contact">
-												<div class="contact-body">
-													<ul class="contacts-list">
-														<!-- 
-														<li class="online"><a ><i class="fa fa-file-text-o" title="online" rel="tooltip-bottom"></i> 测试笔记_1</a></li>
-														 -->
-													</ul>
-												</div>
-											</div>
-										</div>
-									</aside>
-								</div>
-								<!-- 选择笔记 -->
-							</div>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-default cancle" data-dismiss="modal">取 消</button>
-							<button type="button" class="btn btn-primary sure">确 定</button>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- join_activity -->
-			<!-- 全部活动笔记 -->
-			<div class="col-xs-3" style='padding:0 0 0 15px;' id='action_part_1'>
-				<div class="pc_top_first">
-					<h3>活动类型</h3>
-					<button type="button" class="btn btn-default btn-xs btn_plus" id='join_action' title='参加活动...'><i class="fa fa-plus"></i></button>
-				</div>
-				<aside class="side-right" id='first_action'>
-					<div class="module" data-toggle="niceScroll">
-						<div class="chat-contact">
-							<div class="contact-body">
-								<ul class="contacts-list" v-for="activity in activities">
-
-									<li class="online"><a ><i class="fa fa-file-text-o" title="online" rel="tooltip-bottom">{{activity.activitytitle}}</i>
-
-										<button type="button" class="btn btn-default btn-xs btn_position_3 btn_up"><i class="fa fa-thumbs-o-up"></i></button><button type="button" class="btn btn-default btn-xs btn_position_2 btn_down"><i class="fa fa-thumbs-o-down"></i></button><button type="button" class="btn btn-default btn-xs btn_position btn_like"><i class="fa fa-star-o"></i></button></a></li>
-
-								</ul>
-							</div>
-						</div>
-						<div id='more_activity_note'>更多...</div>
-					</div>
-				</aside>
-			</div>
-
-			<div class="col-xs-3" style='padding:0;' id='action_part_2'>
-				<div class="pc_top_second" id='notebookId'>
-					<h3>活动列表</h3>
-					<button type="button" class="btn btn-default btn-xs btn_plus" id='add_note' @click="addnote"><i class="fa fa-plus"></i></button>
-				</div>
-				<aside class="side-right" id='second_side_right'>
-					<div class="module" data-toggle="niceScroll">
-						<div class="chat-contact" >
-							<div class="contact-body">
-								<ul class="contacts-list" v-for="note in notes" @click="findByNoteid" >
-
-
-									<li class="online" :value="note.noteid" @click="getnoteid">
-										<a class='checked' :value="note.notestatus" @click="getnotestatus">
-											<i class="fa fa-file-text-o"  title="online" rel="tooltip-bottom" ></i>
-											{{note.notetitle}}
-											<button type="button" class="btn btn-default btn-xs btn_position btn_slide_down"   @click="deleteNote()" ><i class="fa fa-chevron-down"></i></button>
-										</a>
-										<div class="note_menu" tabindex='-1'>
-											<dl>
-												<dt><button type="button" class="btn btn-default btn-xs btn_move" title='移动至...'><i class="fa fa-random"></i></button></dt>
-												<dt><button type="button" class="btn btn-default btn-xs btn_share" title='分享'><i class="fa fa-sitemap"></i></button></dt>
-												<dt><button type="button" class="btn btn-default btn-xs btn_delete" title='删除'><i class="fa fa-times"></i></button></dt>
-											</dl>
-										</div>
-									</li>
-
-								</ul>
-							</div>
-						</div>
-					</div>
-				</aside>
-				<div class="row clear_margin">
-					<div class="col-xs-4 click" id='rollback_button' title='回收站'><i class='fa fa-trash-o' style='font-size:20px;line-height:31px;'></i></div>
-					<div class="col-xs-4 click" id='like_button' title='收藏笔记本'><i class='fa fa-star' style='font-size:20px;line-height:31px;'></i></div>
-					<div class="col-xs-4 click" id='action_button' title='参加活动笔记'><i class='fa fa-users' style='font-size:20px;line-height:30px;'></i></div>
-				</div>
-			</div>
-			<!-- 全部活动笔记 -->
-			<div class="col-sm-7" id='pc_part_3'>
-				<!-- side-right -->
-				<div class="pc_top_third">
-					<div class="row">
-						<div class="col-xs-9">
-							<h3>活动详情</h3>
-						</div>
-						<div class="col-xs-3">
-							<button type="button" class="btn btn-block btn-sm btn-primary" id='save_note' @click="sharenote()">分享笔记</button>
-						</div>
-					</div>
-				</div>
-				<aside class="side-right" id='third_side_right'>
-					<div class="module" data-toggle="niceScroll">
-						<div class="chat-contact">
-							<div class="contact-body clear_margin" v-for="content in contents">
-								<!--- 笔记标题 --->
-								<div class="row" >
-									<div class="col-xs-8" >
-										<input type="text" class="form-control" id="input_note_title" :placeholder='content.notetitle'  >
-									</div>
-								</div>
-								<!--- 笔记标题 --->
-								<div class="row" >
-									<!--- 输入框 --->
-
-
-								</div>
-
-
-								<!--							<textarea id="summernote"  name="notebody"   v-html="content.notebody"></textarea>-->
-							</div>
-						</div>
-					</div>
-				</aside>
-			</div>
-<!--			&lt;!&ndash; 预览笔记 &ndash;&gt;-->
-<!--			<div class="col-sm-9" id='pc_part_5' >-->
-<!--				<div class="pc_top_third">-->
-<!--					<div class="row">-->
-<!--						<div class="col-xs-9">-->
-<!--							<h3>预览笔记</h3>-->
-<!--						</div>-->
-<!--					</div>-->
-<!--				</div>-->
-<!--				<aside class="side-right" id='fifth_side_right'>-->
-<!--					<div class="module" data-toggle="niceScroll">-->
-<!--						<div class="chat-contact">-->
-<!--							<div class="contact-body clear_margin" id="content_body">-->
-<!--								<h4><strong>笔记标题: </strong>switch多分支结构</h4>-->
-<!--								&lt;!&ndash; 填写笔记内容 &ndash;&gt;-->
-<!--							</div>-->
-<!--						</div>-->
-<!--					</div>-->
-<!--				</aside>-->
-<!--			</div>-->
-<!--			&lt;!&ndash; 预览笔记 &ndash;&gt;-->
+</head>
+<body class="animated fadeIn" id="cloudnote">
+<header class="header">
+	<div class="header-brand">
+		<a data-pjax=".content-body" href="index.html">
+			<img class="brand-logo" src="images/dummy/8986f28e.stilearn-logo.png" alt="Stilearn Admin Sample Logo">
+		</a>
+	</div>
+	<div class="header-profile">
+		<div class="profile-nav">
+			<span class="profile-username">Leo</span>
+			<a  class="dropdown-toggle" data-toggle="dropdown">
+				<span class="fa fa-angle-down"></span>
+			</a>
+			<ul class="dropdown-menu animated flipInX pull-right" role="menu">
+				<li><a href="change_password.html"><i class="fa fa-user"></i> 修改密码</a></li>
+				<li class="divider"></li>
+				<li><a id="logout" href="#" ><i class="fa fa-sign-out"></i> 退出登录</a></li>
+			</ul>
 		</div>
-        <footer>
-            <p>&copy; 2014 Stilearning</p>
-			<div style='position:absolute;top:5PX;height:30px;right:20px;line-height:26px;border:1px solid #0E7D76;display:none;background:#fff'>
-				<strong style='color:#0E7D76;margin:0 10px;'></strong>
+	</div>
+	<form role="form" class="form-inline">
+		<button type="button" class="btn btn-default btn-expand-search"><i class="fa fa-search"></i></button>
+		<div class="toggle-search">
+			<input type="text" class="form-control" placeholder="搜索笔记">
+			<button type="button" class="btn btn-default btn-collapse-search"><i class="fa fa-times"></i></button>
+		</div>
+	</form>
+	<ul class="hidden-xs header-menu pull-right">
+		<li>
+			<a href="activity.html" title="笔记活动">活动</a>
+		</li>
+	</ul>
+</header>
+
+<div class="row" style='padding:0;' id="details" >
+	<!-- alert_background-->
+	<div class="opacity_bg"></div>
+	<div id="can"></div>
+	<!-- alert_like -->
+	<div class="modal fade in" id="modalBasic_14" tabindex="-1" role="dialog" aria-labelledby="modalBasicLabel" aria-hidden="false" style="display: none;">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h4 class="modal-title" id="modalBasicLabel_4">收藏笔记</h4>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<p> 笔记将被默认收藏至<strong>收藏笔记本</strong>，是否继续收藏？</p>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default cancle" data-dismiss="modal">取 消</button>
+					<button type="button" class="btn btn-primary sure">收 藏</button>
+				</div>
 			</div>
-        </footer>
-		<script type="text/javascript">
-			//加载DOM之后处理页面高度
-			function get_dom(e){
-				return document.getElementById(e);
-			}
-			function set_height(){
-				var pc_height=window.innerHeight;
-				pc_height=pc_height-131;
-				get_dom('first_action').style.height=pc_height+'px';
-				get_dom('fifth_side_right').style.height=(pc_height-15)+'px';
-			}
-			set_height();
-			window.onresize=function(){
-				set_height();
-			}
-		</script>
+		</div>
+	</div>
+	<!-- alert_like -->
+	<!-- join_activity -->
+
+	<!-- join_activity -->
+	<!-- 全部活动笔记 -->
+	<div class="col-xs-3" style='padding:0 0 0 15px;' id='action_part_1'>
+		<div class="pc_top_first">
+			<h3>活动类型</h3>
+			<button type="button" class="btn btn-default btn-xs btn_plus" id='join_action' title='参加活动...' @click="showadd()"><i class="fa fa-plus"></i></button>
+		</div>
+		<aside class="side-right" id='first_action'>
+			<div class="module" data-toggle="niceScroll">
+				<div class="chat-contact">
+					<div class="contact-body">
+						<ul class="contacts-list" v-for="activity in activities">
+
+							<li class="online"><a ><i class="fa fa-file-text-o" title="online" rel="tooltip-bottom">{{activity.noteactivitytitle}}</i>
+
+								<button type="button" class="btn btn-default btn-xs btn_position_3 btn_up"><i class="fa fa-thumbs-o-up"></i></button><button type="button" class="btn btn-default btn-xs btn_position_2 btn_down"><i class="fa fa-thumbs-o-down"></i></button><button type="button" class="btn btn-default btn-xs btn_position btn_like"><i class="fa fa-star-o"></i></button></a></li>
+
+						</ul>
+					</div>
+				</div>
+				<!--						<div id='more_activity_note'>更多...</div>-->
+			</div>
+		</aside>
+	</div>
+
+
+
+	<!-- 预览笔记 -->
+	<div class="col-sm-9" id='pc_part_5' >
+		<div class="pc_top_third">
+			<div class="row">
+				<div class="col-xs-9">
+					<h3>预览笔记</h3>
+				</div>
+			</div>
+		</div>
+		<aside class="side-right" id='fifth_side_right'>
+			<div class="module" data-toggle="niceScroll">
+				<div class="chat-contact" v-for="activity in activities">
+					<div class="contact-body clear_margin" id="content_body">
+						<h4><strong>笔记标题: </strong>{{activity.noteactivitytitle}}</h4>
+						<!-- 填写笔记内容 -->
+						<h4>{{activity.noteactivitybody}}</h4>
+					</div>
+				</div>
+			</div>
+		</aside>
+	</div>
+	<!-- 预览笔记 -->
+</div>
+<footer>
+	<p>&copy; 2014 Stilearning</p>
+	<div style='position:absolute;top:5PX;height:30px;right:20px;line-height:26px;border:1px solid #0E7D76;display:none;background:#fff'>
+		<strong style='color:#0E7D76;margin:0 10px;'></strong>
+	</div>
+</footer>
+<script type="text/javascript">
+	//加载DOM之后处理页面高度
+	function get_dom(e){
+		return document.getElementById(e);
+	}
+	function set_height(){
+		var pc_height=window.innerHeight;
+		pc_height=pc_height-131;
+		get_dom('first_action').style.height=pc_height+'px';
+		get_dom('fifth_side_right').style.height=(pc_height-15)+'px';
+	}
+	set_height();
+	window.onresize=function(){
+		set_height();
+	}
+</script>
 <!--        <script type="text/javascript" src="scripts/common/jquery.min.js"></script>-->
-		<!-- 全局变量&&AJAX&&回调函数&&COOKIE -->
+<!-- 全局变量&&AJAX&&回调函数&&COOKIE -->
 <!--		<script type="text/javascript" src="scripts/base.js"></script>-->
 <!--		<script type="text/javascript" src="scripts/login.js"></script>-->
 <!--        <script type="text/javascript" src="scripts/cookie.js"></script>-->
@@ -285,27 +164,38 @@
 <!--        <script type="text/javascript" src="scripts/common/bootstrap.min.js"></script>-->
 <!--        <script type="text/javascript" src="scripts/common/js-prototype.js"></script>       -->
 <!--        <script type="text/javascript" src="scripts/common/theme-setup.js"></script>-->
-		<!-- 页面事件处理JS -->
+<!-- 页面事件处理JS -->
 
-        <script type="text/javascript">
+<script type="text/javascript">
 
-			let v=new Vue({
-				el:"#action_part_1",
-				data:{
-					activities:[]
-				},
-				created() {
-					alert("aaa");
-					axios.post("cloudnote-notebook/findAllActivity").then(res=>{
-						this.activities=res.data.data;
-					})
-				},
-				methods: {
-
+	let v=new Vue({
+		el:"#cloudnote",
+		data:{
+			activities:[],
+			addflag: false
+		},
+		created() {
+			// alert("aaa");
+			// axios.post("cloudnote-notebook/findAllActivity").then(res=>{
+			// 	this.activities=res.data.data;
+			// })
+			axios.get("cloudnote-note/selectByActivityId").then(res=>{
+				if (res.data.data==null){
+					alert("暂无活动");
+					location.href="activity.html"
 				}
-
+				this.activities=res.data.data;
 			})
+		},
+		methods: {
+			showadd:function () {
+				location.href="addActivity.html"
+			}
 
-        </script>
-    </body>		
+		}
+
+	})
+
+</script>
+</body>
 </html>

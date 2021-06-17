@@ -74,7 +74,7 @@
 				params.append("userid",this.userid);
 				params.append("notetitle",this.notetitle);
 				params.append("notebody",this.notebody);
-				axios.post("cloudnote-notebook/insertNote",params).then(response=>{
+				axios.post("cloudnote-note/insertNote",params).then(response=>{
 					if(response.data.code==1) {
 
 						location.href="http://127.0.0.1/"

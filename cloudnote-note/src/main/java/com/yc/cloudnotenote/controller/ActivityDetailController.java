@@ -26,7 +26,7 @@ public class ActivityDetailController {
     private INoteMapper noteMapper;
 
     @RequestMapping(value = "selectByActivityId",method = {RequestMethod.POST,RequestMethod.GET})
-    public Result selectByActivityId(@SessionAttribute(required = false) Activitydetail sendActivityid){
+    public Result selectByActivityId(@SessionAttribute(required = false) Activity sendActivityid){
         List<Activitydetail> list=detailMapper.selectByActivityId(sendActivityid.getActivityid());
         Result res=Result.success("success",list);
         return res;
