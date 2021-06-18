@@ -1,16 +1,61 @@
-/**login.js 封装登录和注册处理**/
-//log_in.html主处理
 $(function(){//页面载入完毕
 	//给登录按钮绑定单击处理
 	$("#login").click(checkLogin);
 	//给注册按钮绑定单击处理
 	$("#regist_button").click(registerUser);
 });
+
+//登录处理
+function checkLogin(){
+	//获取参数
+	var name=$("#count").val().trim();//获取输入的账号
+	var password=$("#password").val().trim();//获取输入的密码
+	//清空以前提示信息
+	$("#count_span").html("");
+	$("#password_span").html("");
+	//格式检测
+	var ok=true;
+	if(name==""){
+		$("#count_span").html("用户不能为空");
+		ok=false;
+	}
+	if(password==""){
+		$("#password_span").html("密码不能为空");
+		ok=false;
+	}
+	//发送请求
+	if(ok){  //检测格式通过
+		//发送ajax请求
+		$.ajax({
+			url:"/cloudnote-user/login",
+			type:"post",
+			data:{"username":name,"userpassword":password},
+			dataType:"json",
+
+			success:function(result){
+				//result是服务器返回的JSON结果
+				if (result.code==1) { //登录成功
+					//将用户信息保存到Cookie
+					//***********************************************
+					window.location.href="" +
+						"index.html";
+				}else if(result.code==0){
+
+					$("#password_span").html(result.msg);
+
+				}
+			},
+			error:function(){
+				alert("登录失败!");
+			}
+		});
+	}
+};
+
 //注册处理
 function registerUser(){
 	//获取参数
 	var name=$("#regist_username").val().trim();//获取账户名
-	var nick=$("#nickname").val().trim();//获取昵称
 	var password=$("#regist_password").val().trim();//获取密码
 	var final_password=$("#final_password").val().trim();//获取确认密码
 	//检查数据格式
@@ -60,53 +105,6 @@ function registerUser(){
 			},
 			error:function(){
 				alert("注册异常");
-			}
-		});
-	}
-};
-//登录处理
-function checkLogin(){
-	//获取参数
-	var name=$("#count").val().trim();//获取输入的账号
-	var password=$("#password").val().trim();//获取输入的密码
-	//清空以前提示信息
-	$("#count_span").html("");
-	$("#password_span").html("");
-	//格式检测
-	var ok=true;
-	if(name==""){
-		$("#count_span").html("用户不能为空");
-		ok=false;
-	}
-	if(password==""){
-		$("#password_span").html("密码不能为空");
-		ok=false;
-	}
-	//发送请求
-	if(ok){  //检测格式通过
-		//发送ajax请求
-		$.ajax({
-			url:base_path+"/user/login.do",
-			type:"post",
-			data:{"name":name,"password":password},
-			dataType:"json",
-			success:function(result){
-				//result是服务器返回的JSON结果
-				if (result.status==0) { //登录成功
-					//将用户信息保存到Cookie
-					var userName=result.data.cn_user_name;
-					var userId=result.data.cn_user_id;
-					addCookie("userId",userId,2);
-					addCookie("userName",userName,2);
-					window.location.href="edit.html";
-				}else if(result.status==1){//用户名错误
-					$("#count_span").html(result.msg);
-				}else if(result.status==2){//密码错误
-					$("#password_span").html(result.msg);
-				}
-			},
-			error:function(){
-				alert("登录失败!");
 			}
 		});
 	}

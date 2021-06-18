@@ -1,97 +1,148 @@
-/**
- * 笔记本的操作
- * @returns
+/***
+ * 加载普通笔记本
  */
-
-//根据用户id显示笔记本列表
-function loadUserBooks() {
-	//获取userId
-	var userId=getCookie("userId");
-	//判断是否获取到有效的userId
-	if(userId==null){
-		//转发回登录页面
-		window.location.href="log_in.html";
-	}else {//发送ajax请求
-		$.ajax({
-			url:base_path+"/book/loadBooks.do",
-			type:"post",
-			data:{"userId":userId},
-			dataType:"json",
-			success:function(result){
-				//判断查询是否成功
-				if(result.status==0){
-					//获取笔记本集合
-					var books=result.data;
-					for(var i=0;i<books.length;i++){
-						//获取笔记本ID
-						var bookId=books[i].cn_notebook_id;
-						//获取笔记本名称
-						var bookName=books[i].cn_notebook_name;
-						
-						//创建一个笔记本列表项的li元素
-						createBookLi(bookId,bookName);
-					}
-				}
-			},
-			error:function(){
-				alert("笔记本加载失败")
+function loadNormalNoteBook(){
+	$.ajax({
+		type:"post",
+		url:basePath+"notebook/findNormal.do",
+		dataType:"json",
+		data:{},
+		success:function(result) {
+			if(result.status==0) {
+				var list = result.data;
+				$(list).each(function(){
+					$("#first_side_right ul").append('<li class="online"><a><i class="fa fa-book" title="笔记本" rel="tooltip-bottom"></i> '+this.cn_notebook_name+'<button type="button" class="btn btn-default btn-xs btn_position btn_delete"><i class="fa fa-times"></i></button></a></li>');
+					$('#first_side_right li:last').data('notebook',this);
+				});
+			} else {
+				alert(result.message);
 			}
-		});
-	}
-};
-//创建一个笔记本列表项的li元素
-function createBookLi(bookId,bookName){
-	var sli="";
-	sli+='<li class="online">';
-	sli+='<a>';
-	sli+='<i class="fa fa-book" title="online" rel="tooltip-bottom">';
-	sli+='</i>';
-	sli+=bookName;
-	sli+='</a>';
-	sli+='</li>';
-	//将sli字符串转换成jquery对象li元素
-	var $li=$(sli);
-	//将bookId的值与jquery对象绑定
-	$li.data("bookId",bookId);
-	//将li元素添加到笔记本ul列表区
-	$("#book_ul").append($li);
-};
+		},
+		error:function(xhr,status,error) {
+			alert("请求失败.");
+		}
+	});
+}
 
-
-function addBook(){
-	//获取用户ID
-	var userId=getCookie("userId");
-	//获取笔记本标题
-	var title=$("#input_notebook").val();
-	//数据格式检查
-	var ok=true;
-	if(title==""){
-		ok=false;
-		$("#title_span").html("标题不能为空");
-	}
-	if(userId==null){//检查是否生效
-		ok=false;
-		window.location.href="log_in.html";
-	}
-	if(ok){
-		//发送ajax请求
-		$.ajax({
-			url:base_path+"/book/add.do",
-			type:"post",
-			data:{"userId":userId,"title":title},
-			dataType:"json",
-			success:function(result){
-				var book=result.data;
-				if(result.status==0){
-					var id=book.cn_notebook_id;
-					var title=book.cn_notebook_name;
-					createBookLi(id,title);//创建一个笔记本列表的li元素
-					alert(result.msg);
-				}
-			},
-			error:function(){
-				alert("创建笔记本失败");
+/***
+ * 加载特殊笔记本
+ */
+function loadSpecialNoteBook(){
+	$.ajax({
+		type:"post",
+		url:basePath+"notebook/findSpecial.do",
+		dataType:"json",
+		data:{},
+		success:function(result) {
+			if(result.status==0) {
+				var map = result.data;
+				$('#first_side_right li:first').data('notebook',map.push);
+				$('#rollback_button').data('notebook',map.recycle);
+				$('#like_button').data('notebook',map.favorites);
+				$('#action_button').data('notebook',map.action);
+			} else {
+				alert(result.message);
 			}
-		});
-	}
-}; 
+		},
+		error:function(xhr,status,error) {
+			alert("请求失败.");
+		}
+	});
+}
+
+/****
+ * 添加笔记本
+ */
+function addNoteBook(noteBookName){
+	$.ajax({
+		type:"post",
+		url:basePath+"notebook/addNoteBook.do",
+		dataType:"json",
+		data:{"cn_notebook_name":noteBookName},
+		success:function(result) {
+			if(result.status==0) {
+				var noteBook = result.data;
+				$("#first_side_right ul li:first").after('<li class="online"><a><i class="fa fa-book" title="笔记本" rel="tooltip-bottom"></i> '+noteBook.cn_notebook_name+'<button type="button" class="btn btn-default btn-xs btn_position btn_delete"><i class="fa fa-times"></i></button></a></li>');
+				$("#first_side_right ul li:first").next().data('notebook',noteBook);
+				$(".close,.cancle").trigger("click");
+			} else {
+				alert(result.message);
+			}
+		},
+		error:function(xhr,status,error) {
+			alert("请求失败.");
+		}
+	});
+}
+
+/***
+ * 重命名笔记本
+ */
+function updateNoteBook(noteBookId, noteBookName, dom){
+	$.ajax({
+		type:"post",
+		url:basePath+"notebook/updateNoteBookName.do",
+		dataType:"json",
+		data:{"noteBookId":noteBookId,"noteBookName":noteBookName},
+		success:function(result) {
+			if(result.status==0) {
+				dom.children('a').html('<i class="fa fa-book" title="笔记本" rel="tooltip-bottom"></i> '+noteBookName+'<button type="button" class="btn btn-default btn-xs btn_position btn_delete"><i class="fa fa-times"></i></button>');
+				$('.close,.cancle').trigger('click');
+			} else {
+				alert(result.message);
+			}
+		},
+		error:function(xhr,status,error) {
+			alert("请求失败.");
+		}
+	});
+}
+
+/***
+ * 删除笔记本
+ */
+function deleteNoteBook(noteBookId,dom){
+	$.ajax({
+		type:"post",
+		url:basePath+"notebook/deleteNoteBook.do",
+		dataType:"json",
+		data:{"noteBookId":noteBookId},
+		success:function(result) {
+			if(result.status==0) {
+				dom.remove();
+				$('.close,.cancle').trigger('click');
+			} else {
+				alert(result.message);
+			}
+		},
+		error:function(xhr,status,error) {
+			alert("请求失败.");
+		}
+	});
+}
+
+/**
+ * 将笔记本列表放置到select组件中
+ */
+function setNoteBookToSelect(selectId){
+	$.ajax({
+		type:"post",
+		url:basePath+"notebook/findList.do",
+		dataType:"json",
+		data:{},
+		success:function(result) {
+			if(result.status==0) {
+				var list = result.data;
+				$(list).each(function(){
+					var option = "<option value='"+this.cn_notebook_id+"'>"+this.cn_notebook_name+"</option>";
+					$("#"+selectId).append(option);
+				});
+			} else {
+				alert(result.message);
+			}
+		},
+		error:function(xhr,status,error) {
+			alert("请求失败.");
+		}
+	});
+}

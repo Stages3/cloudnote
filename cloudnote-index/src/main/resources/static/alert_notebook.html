@@ -52,7 +52,7 @@
 							params.append("userid",this.userid);
 							params.append("notebookname",this.notebookname);
 							params.append("notebookdesc",this.notebookdesc);
-							axios.post("cloudnote-notebook/insertNoteBook",params).then(response=>{
+							axios.post("cloudnote-note/insertNoteBook",params).then(response=>{
 								if(response.data.code==1) {
 
 									location.href="index.html"
