@@ -1,0 +1,92 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="/webjars/vue/2.5.16/dist/vue.min.js"></script>
+	<script src="/webjars/axios/0.21.1/dist/axios.min.js"></script>
+</head>
+<body>
+
+
+<form name="myform" action=""  method="post">
+
+<div class="modal fade in" id="modalBasic_2" tabindex="-1" role="dialog" aria-labelledby="modalBasicLabel" aria-hidden="false">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+								<h4 class="modal-title" id="modalBasicLabel_2">新建笔记</h4>
+							</div>
+							<div class="modal-body">
+								<table>
+<!--									<tr>-->
+<!--										<td>notebookid</td>-->
+<!--										<td><input type="text" v-model="notebookid"/></td>-->
+
+<!--									</tr>-->
+									<tr>
+										<td>userid</td>
+										<td><input type="text" v-model="userid"/></td>
+									</tr>
+
+									<tr>
+										<td>notetitle</td>
+										<td><input type="text" v-model="notetitle"/></td>
+									</tr>
+									<tr>
+										<td>notebody</td>
+										<td><input type="text" v-model="notebody"/></td>
+									</tr>
+								</table>
+
+							</div>
+
+							<div class="modal-footer" style='margin-top:20px;'>
+								<button type="button" class="btn btn-default cancle" data-dismiss="modal" @click="returnIndex()">取 消</button>
+								<button type="button" class="btn btn-primary sure" @click="addNote">创 建</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+</form>
+<script>
+	let v=new Vue({
+		el:"#modalBasic_2",
+		data:{
+			notetitle: "",
+			// notebookid: 0,
+			userid: 0,
+			notebody:""
+
+
+		},
+		create(){
+			// console.log(this.$route.query.notebookid);
+			// this.notebookid=this.$route.query.notebookid;
+		},
+		methods:{
+
+			addNote:function (){
+
+				let params=new URLSearchParams();
+				// params.append("notebookid",this.notebookid);
+				params.append("userid",this.userid);
+				params.append("notetitle",this.notetitle);
+				params.append("notebody",this.notebody);
+				axios.post("cloudnote-notebook/insertNote",params).then(response=>{
+					if(response.data.code==1) {
+
+						location.href="http://127.0.0.1/"
+					}
+				});
+			}
+		}
+	})
+
+
+</script>
+
+</body>
+
+</html>
