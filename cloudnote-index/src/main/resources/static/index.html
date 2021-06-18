@@ -88,8 +88,8 @@
 
 							<!--									</li>v-if="showid" v-model="notebookid"-->
 
-
-							<li id="notebook_id" class="online" :value="book.notebookid" @click="getbookid" >
+<!---->
+							<li id="notebook_id" class="online"  :value="book.notebookid" @click="getbookid">
 								<a class='unchecked'  >
 									<i id="notebook"  :value="book.notebookid" class="fa fa-file-text-o"  title="online" rel="tooltip-bottom"  ></i> {{book.notebookname}}
 									<button type="button" class="btn btn-default btn-xs btn_position btn_delete" @click="deletenotebook"><i class="fa fa-times"></i></button>
@@ -122,7 +122,7 @@
 					<div class="contact-body">
 						<ul class="contacts-list" v-for="note in notes" @click="findByNoteid" >
 
-
+<!---->
 							<li class="online" :value="note.noteid" @click="getnoteid">
 								<a class='checked' :value="note.notestatus" @click="getnotestatus">
 									<i class="fa fa-file-text-o"  title="online" rel="tooltip-bottom" ></i>
@@ -238,7 +238,7 @@
 					<h3>编辑笔记</h3>
 				</div>
 				<div class="col-xs-3">
-					<button type="button" class="btn btn-block btn-sm btn-primary" id='save_note' @click="sharenote()">分享笔记</button>
+					<button type="button" class="btn btn-block btn-sm btn-primary" id='save_note' @click="sharenote()">保存笔记</button>
 				</div>
 			</div>
 		</div>
@@ -352,15 +352,14 @@
 
 
 	let v=new Vue({
-		el: "#cloudnote",
+		el: "#center",
 		data: {
 
-			addnoteflag: false,
-			Bookflag: false,
+
 			books: [],
 			notes: [],
 			contents:[],
-			showid: true,
+
 			notebookid: 0,
 			noteid: 0,
 			notestatus: 0

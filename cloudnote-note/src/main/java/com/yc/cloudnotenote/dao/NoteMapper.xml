@@ -9,11 +9,11 @@
     id 要对应 接口中的方法名
     -->
 
-    <select id="findBynotebookid" resultType="com.yc.cloudnotenote.bean.Note">
+    <select id="findBynotebookid" resultType="com.yc.cloudnote.bean.Note">
         select * from note where notebookid=#{notebookid}
     </select>
 
-    <select id="findByNoteid" resultType="com.yc.cloudnotenote.bean.Note">
+    <select id="findByNoteid" resultType="com.yc.cloudnote.bean.Note">
         select * from note where noteid=#{noteid}
     </select>
 

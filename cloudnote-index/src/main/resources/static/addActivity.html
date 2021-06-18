@@ -2,63 +2,113 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>分享笔记</title>
+    <script src="/webjars/vue/2.5.16/dist/vue.min.js"></script>
+    <script src="/webjars/axios/0.21.1/dist/axios.min.js"></script>
 </head>
-<body id="app">
-<div  v-for="book in books">
-<form enctype="multipart/form-data" method="post">
-<h4 >选择参加活动的笔记本</h4>
-<select v-model="notebookid" >
-    <option value="">选择一个笔记本</option>
-    <option :value="book.notebookid">{{book.notebookname}}</option>
-</select>
-</div>
+<body >
+<div id="app">
+    <form enctype="multipart/form-data" method="post">
+        <div  >
 
-<div v-for="note in notes">
-    <h4 >选择参加活动的笔记</h4>
-    <select v-model="noteid">
-        <option value="">选择一个笔记</option>
-        <option :value="note.id">{{note.notetitle}}</option>
-    </select>
-</div>
+            <h4 >选择参加活动的笔记本</h4>
+            <select v-model="notebookname" @click="getnotes">
 
-<br/>
-<div >
-    <input type="button" value="提交" @click="addToActivity" />
-    <input type="button" value="取消" @click="returnActivity" />
-</div>
+                <option  v-for="book in books" :value="book.notebookid" @click="getnotebookid"  >{{book.notebookname}}</option>
+            </select>
+        </div>
 
-</form>
+        <div >
+            <h4 >选择参加活动的笔记</h4>
+            <select v-model="notetitle">
+                <option  v-for="note in notes":body="note.notebody" :name="note.notetitle" :value="note.noteid" @click="getnoteid">{{note.notetitle}}</option>
+            </select>
+        </div>
+
+
+        <br/>
+        <div >
+            <input type="button" value="提交" @click="addToActivity" />
+            <input type="button" value="取消" @click="returnActivity" />
+        </div>
+
+    </form>
+
+</div>
 
 <script>
     let v=new Vue({
         el: '#app',
         data: {
+            notebookname: '',
+            notetitle:'',
             notebookid: 0,
-            noteid: 0,
+            noteid:0,
             books: [],
-            notes: []
+            notes: [],
+            note:[],
+            notetitle1:'',
+            notebody:''
         },
         created(){
+            alert("aaaa");
             axios.get("cloudnote-note/findAllNoteBook").then(res=>{
                 this.books=res.data.data;
             })
         },
         methods: {
-            findBynotebookid: function (){
+            getnotebookid:function (event){
+                this.notebookid=event.currentTarget.getAttribute("value");
+                console.log("notebookid",event.currentTarget.getAttribute("value"));
+                return this.notebookid;
+            },
+            getnoteid:function (event){
+                this.noteid=event.currentTarget.getAttribute("value");
+                console.log("noteid",event.currentTarget.getAttribute("value"));
+                // this.notetitle1=event.currentTarget.getAttribute("name");
+                // console.log(event.currentTarget.getAttribute("name"));
+                // this.notebody=event.currentTarget.getAttribute("body");
+                // console.log(event.currentTarget.getAttribute("body"));
+                return this.noteid;
+            },
+            getnotes:function () {
                 axios.get("cloudnote-note/findBynotebookid?notebookid="+this.notebookid).then(response=>{
                     if(response.data.code==1) {
                         this.notes=response.data.data;
                     }
                 });
             },
+
             addToActivity:function () {
+                // let params=new URLSearchParams();
+                // params.append("noteid",this.noteid);
+                // params.append("notetitle",this.notetitle);
+                axios.get("cloudnote-note/findByNoteid?noteid="+this.noteid).then(res1=>{
+                    if(res1.data.code==1){
+                        this.note=res1.data.data;
+                        alert("分享");
+                        // let params=new URLSearchParams();
+                        // params.append("noteid",this.noteid);
+                        // params.append("noteactivitytitle",this.notetitle1);
+                        // params.append("noteactivitybody",this.notebody);
+                        axios.post("cloudnote-note/shareByNoteId").then(res=>{
+                            if(res.data.code==1){
+                                location.href="activity_detail.html";
+                            }
+                        })
+                    }
+                })
 
             },
             returnActivity:function () {
                 location.href="activity_detail.html"
             }
+        },
+        update(){
+            console.log(this.notebookid);
+
         }
+
     })
 </script>
 </body>

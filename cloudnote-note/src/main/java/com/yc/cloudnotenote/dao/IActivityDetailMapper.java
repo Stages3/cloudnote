@@ -14,6 +14,9 @@ public interface IActivityDetailMapper {
     @Select("select * from activitydetail where activityid=#{activityid}")
     List<Activitydetail> selectByActivityId(int activityid);
 
+    @Select("select * from activitydetail where noteid=#{noteid}")
+    List<Activitydetail> selectByNoteId(int noteid);
+
     @Insert("insert into activitydetail values(default,#{activityid},#{userid},#{username},#{noteid},#{noteactivityup},#{noteactivitydown},#{noteactivitytitle},#{noteactivitybody},null)")
     @Options(useGeneratedKeys = true,keyColumn = "noteactivityid",keyProperty = "noteactivityid")
     int insert(Activitydetail activitydetail);

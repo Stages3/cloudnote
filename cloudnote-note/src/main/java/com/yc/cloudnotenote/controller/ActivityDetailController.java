@@ -3,6 +3,7 @@ package com.yc.cloudnotenote.controller;
 import com.yc.cloudnote.bean.Activity;
 import com.yc.cloudnote.bean.Activitydetail;
 import com.yc.cloudnote.bean.Note;
+import com.yc.cloudnote.enums.ActivityDetailEnum;
 import com.yc.cloudnotenote.dao.IActivityDetailMapper;
 import com.yc.cloudnotenote.dao.INoteMapper;
 import com.yc.cloudnote.enums.NoteStatusEnum;
@@ -15,6 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -26,20 +30,31 @@ public class ActivityDetailController {
     private INoteMapper noteMapper;
 
     @RequestMapping(value = "selectByActivityId",method = {RequestMethod.POST,RequestMethod.GET})
-    public Result selectByActivityId(@SessionAttribute(required = false) Activity sendActivityid){
+    public Result selectByActivityId(@SessionAttribute(required = false) Activity sendActivityid, HttpSession session){
         List<Activitydetail> list=detailMapper.selectByActivityId(sendActivityid.getActivityid());
+        session.setAttribute("sendAcid",list.get(0));
+        Result res=Result.success("success",list);
+        return res;
+    }
+
+    @RequestMapping(value = "selectByNoteId",method = {RequestMethod.POST,RequestMethod.GET})
+    public Result selectByNoteId(Activitydetail activitydetail){
+        List<Activitydetail> list=detailMapper.selectByNoteId(activitydetail.getNoteid());
         Result res=Result.success("success",list);
         return res;
     }
 
     @RequestMapping(value = "shareByNoteId",method = {RequestMethod.POST,RequestMethod.GET})
-    public Result shareByNoteId(Note note, Activitydetail activitydetail){
-        note.setNotestatus(NoteStatusEnum.FINISHED.getCode());
-        noteMapper.update(note);
-        activitydetail.setNoteactivitytitle(note.getNotetitle());
-        activitydetail.setNoteactivitybody(note.getNotebody());
+    public Result shareByNoteId(Note note,@SessionAttribute(required = false) Note sendNoteid, Activitydetail activitydetail, @SessionAttribute(required = false) Activitydetail sendAcid) throws IOException {
+        activitydetail.setActivityid(sendAcid.getActivityid());
+        activitydetail.setNoteactivitystatus(ActivityDetailEnum.NEW.getCode());
         int result=detailMapper.insert(activitydetail);
         Result res=Result.success("success",result);
+        if(res.getCode()==1){
+            note.setNoteid(sendNoteid.getNoteid());
+            note.setNotestatus(NoteStatusEnum.FINISHED.getCode());
+            noteMapper.update(note);
+        }
         return res;
     }
 }

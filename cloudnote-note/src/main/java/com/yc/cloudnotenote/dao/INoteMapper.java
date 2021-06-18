@@ -21,8 +21,8 @@ public interface INoteMapper {
     @Options(useGeneratedKeys = true,keyColumn = "noteid",keyProperty = "noteid")
     int insert(Note note);
 
-    //UPDATE notebook SET notebookname="ceshi" WHERE notebookid=1
-    @Update("update note set notetitle=#{notetitle},notebody=#{notebody},notestatus=#{notestatus} where noteid=#{noteid}")
+    //UPDATE notebook SET notebookname="ceshi" WHERE notebookid=1 ,notetitle=#{notetitle},notebody=#{notebody}
+    @Update("update note set notestatus=#{notestatus} where noteid=#{noteid}")
     int update(Note note);
 
     //DELETE FROM note WHERE noteid=4 notebookid=#{notebookid}

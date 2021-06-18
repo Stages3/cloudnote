@@ -133,9 +133,11 @@
             getActivityDetail:function (){
 
                 axios.get("http://127.0.0.1/cloudnote-note/findByActivityid?activityid="+this.activityid).then(res=>{
-                    if(res.data.code==1){
+                    if(res.data.data!=null){
                         this.details=res.data.data;
                         location.href="activity_detail.html?activityid="+this.activityid;
+                    }else{
+                        location.href="activity.html";
                     }
                 })
             },

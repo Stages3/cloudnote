@@ -36,8 +36,9 @@ public class NoteController {
     }
 
     @RequestMapping(value = "findByNoteid",method = {RequestMethod.POST,RequestMethod.GET})
-    public Result findByNoteid(Note note){
+    public Result findByNoteid(Note note,HttpSession session){
         List<Note> list=dao.findByNoteid(note.getNoteid());
+        session.setAttribute("sendNoteid",list.get(0));
         return Result.success("success",list);
     }
 

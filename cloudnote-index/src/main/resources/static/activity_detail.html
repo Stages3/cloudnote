@@ -91,11 +91,16 @@
 			<div class="module" data-toggle="niceScroll">
 				<div class="chat-contact">
 					<div class="contact-body">
-						<ul class="contacts-list" v-for="activity in activities">
+						<ul class="contacts-list" v-for="activity in activities" @click="getactivity">
 
-							<li class="online"><a ><i class="fa fa-file-text-o" title="online" rel="tooltip-bottom">{{activity.noteactivitytitle}}</i>
+							<li class="online" :value="activity.noteid" @click="getnoteid"><a ><i class="fa fa-file-text-o"  title="online" rel="tooltip-bottom" >{{activity.noteactivitytitle}}</i>
 
-								<button type="button" class="btn btn-default btn-xs btn_position_3 btn_up"><i class="fa fa-thumbs-o-up"></i></button><button type="button" class="btn btn-default btn-xs btn_position_2 btn_down"><i class="fa fa-thumbs-o-down"></i></button><button type="button" class="btn btn-default btn-xs btn_position btn_like"><i class="fa fa-star-o"></i></button></a></li>
+								<button type="button" class="btn btn-default btn-xs btn_position_3 btn_up"><i class="fa fa-thumbs-o-up"></i>
+								</button>
+								<button type="button" class="btn btn-default btn-xs btn_position_2 btn_down"><i class="fa fa-thumbs-o-down"></i>
+								</button>
+								<button type="button" class="btn btn-default btn-xs btn_position btn_like"><i class="fa fa-star-o"></i>
+								</button></a></li>
 
 						</ul>
 					</div>
@@ -113,16 +118,17 @@
 			<div class="row">
 				<div class="col-xs-9">
 					<h3>预览笔记</h3>
+
 				</div>
 			</div>
 		</div>
 		<aside class="side-right" id='fifth_side_right'>
 			<div class="module" data-toggle="niceScroll">
-				<div class="chat-contact" v-for="activity in activities">
+				<div class="chat-contact" v-for="note in notes">
 					<div class="contact-body clear_margin" id="content_body">
-						<h4><strong>笔记标题: </strong>{{activity.noteactivitytitle}}</h4>
+						<h4><strong>笔记标题: </strong>{{note.notetitle}}</h4>
 						<!-- 填写笔记内容 -->
-						<h4>{{activity.noteactivitybody}}</h4>
+						<h4>{{note.notebody}}</h4>
 					</div>
 				</div>
 			</div>
@@ -169,10 +175,12 @@
 <script type="text/javascript">
 
 	let v=new Vue({
-		el:"#cloudnote",
+		el:"#details",
 		data:{
 			activities:[],
-			addflag: false
+			addflag: false,
+			noteid:0,
+			notes:[]
 		},
 		created() {
 			// alert("aaa");
@@ -180,16 +188,30 @@
 			// 	this.activities=res.data.data;
 			// })
 			axios.get("cloudnote-note/selectByActivityId").then(res=>{
-				if (res.data.data==null){
+				if (res.data.data!=null){
+					this.activities=res.data.data;
+				}else {
 					alert("暂无活动");
 					location.href="activity.html"
 				}
-				this.activities=res.data.data;
+
 			})
 		},
 		methods: {
+			getnoteid:function (event) {
+				this.noteid=event.currentTarget.getAttribute("value");
+				console.log("noteid",event.currentTarget.getAttribute("value"));
+				return this.noteid;
+			},
 			showadd:function () {
 				location.href="addActivity.html"
+			},
+			getactivity:function(){
+				axios.get("cloudnote-note/findByNoteid?noteid="+this.noteid).then(res1=>{
+					if(res1.data.code==1){
+						this.notes=res1.data.data;
+					}
+				})
 			}
 
 		}

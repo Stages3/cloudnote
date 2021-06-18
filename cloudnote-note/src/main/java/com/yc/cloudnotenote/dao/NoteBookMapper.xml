@@ -8,11 +8,11 @@
     <!--    select 标签== @select  resultType 设定返回的实体类类型
     id 要对应 接口中的方法名
     -->
-    <select id="selectByUserId" resultType="com.yc.cloudnotenote.bean.Notebook">
+    <select id="selectByUserId" resultType="com.yc.cloudnote.bean.Notebook">
         select * from notebook where userid= #{userid}
     </select>
 
-    <delete id="deleteNotebookById" parameterType="com.yc.cloudnotenote.bean.Notebook">
+    <delete id="deleteNotebookById" parameterType="com.yc.cloudnote.bean.Notebook">
         delete from notebook where notebookid=#{notebookid}
     </delete>
 

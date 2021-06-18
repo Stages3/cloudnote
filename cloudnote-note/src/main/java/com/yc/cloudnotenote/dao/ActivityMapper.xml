@@ -8,7 +8,7 @@
     <!--    select 标签== @select  resultType 设定返回的实体类类型
     id 要对应 接口中的方法名
     -->
-    <select id="findByActivityid" resultType="com.yc.cloudnotenote.bean.Activity">
+    <select id="findByActivityid" resultType="com.yc.cloudnote.bean.Activity">
         select * from activity where activityid=#{activityid}
     </select>
 
