@@ -84,7 +84,7 @@
 	<!-- 全部活动笔记 -->
 	<div class="col-xs-3" style='padding:0 0 0 15px;' id='action_part_1'>
 		<div class="pc_top_first">
-			<h3>活动类型</h3>
+			<h3>活动笔记列表</h3>
 			<button type="button" class="btn btn-default btn-xs btn_plus" id='join_action' title='参加活动...' @click="showadd()"><i class="fa fa-plus"></i></button>
 		</div>
 		<aside class="side-right" id='first_action'>
@@ -97,9 +97,11 @@
 								<a :value="activity.noteactivityid"  @click="getnaid">
 								<i class="fa fa-file-text-o"  title="online" rel="tooltip-bottom" >{{activity.noteactivitytitle}}</i>
 
-								<button type="button" class="btn btn-default btn-xs btn_position_3 btn_up" @click="addup"><i class="fa fa-thumbs-o-up"></i>
+								<button type="button" :placeholder="activity.noteactivityup" class="btn btn-default btn-xs btn_position_3 btn_up" @click="addup">
+									<i class="fa fa-thumbs-o-up">{{activity.noteactivityup}}</i>
 								</button>
-								<button type="button" class="btn btn-default btn-xs btn_position_2 btn_down" @click="adddown"><i class="fa fa-thumbs-o-down"></i>
+								<button type="button"  :placeholder="activity.noteactivitydown" class="btn btn-default btn-xs btn_position_2 btn_down" @click="adddown">
+									<i class="fa fa-thumbs-o-down">{{activity.noteactivitydown}}</i>
 								</button>
 								<button type="button" class="btn btn-default btn-xs btn_position btn_like"><i class="fa fa-star-o"></i>
 								</button></a></li>
@@ -127,10 +129,10 @@
 		<aside class="side-right" id='fifth_side_right'>
 			<div class="module" data-toggle="niceScroll">
 				<div class="chat-contact" v-for="note in notes">
-					<div class="contact-body clear_margin" id="content_body">
+					<div class="contact-body clear_margin" id="content_body" >
 						<h4><strong>笔记标题: </strong>{{note.notetitle}}</h4>
 						<!-- 填写笔记内容 -->
-						<h4>{{note.notebody}}</h4>
+						<h4><strong>笔记内容: </strong>{{note.notebody}}</h4>
 					</div>
 				</div>
 			</div>
@@ -183,7 +185,8 @@
 			addflag: false,
 			noteid:0,
 			notes:[],
-			noteactivityid:0
+			noteactivityid:0,
+			noteavtivity:[]
 		},
 		created() {
 			// alert("aaa");
@@ -220,12 +223,17 @@
 						this.notes=res1.data.data;
 					}
 				})
+				// axios.get("cloud-note/selectByNoteActivityId?noteactivityid="+this.noteactivityid).then(res=>{
+				// 	if(res.data.code==1){
+				// 		this.noteavtivity=res.data.data;
+				// 	}
+				// })
 			},
 			addup:function () {
 				axios.get("cloudnote-note/updateup?noteactivityid="+this.noteactivityid).then(res=>{
 					if(res.data.code==1){
 						alert("点赞成功");
-
+						location.href="http://127.0.0.1/activity_detail.html"
 					}
 				})
 
@@ -234,6 +242,7 @@
 				axios.get("cloudnote-note/updatedown?noteactivityid="+this.noteactivityid).then(res=>{
 					if(res.data.code==1){
 						alert("踩一踩");
+						location.href="http://127.0.0.1/activity_detail.html"
 					}
 				})
 			}

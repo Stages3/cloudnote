@@ -34,6 +34,12 @@ public class ActivityDetailController {
         Result res=Result.success("success",list);
         return res;
     }
+    @RequestMapping(value = "selectByNoteActivityId",method = {RequestMethod.POST,RequestMethod.GET})
+    public Result selectByNoteActivityId(Activitydetail activitydetail){
+        List<Activitydetail> list=detailMapper.selectByNoteActivityId(activitydetail.getNoteactivityid());
+        Result res=Result.success("success",list);
+        return res;
+    }
 
     @RequestMapping(value = "selectByNoteId",method = {RequestMethod.POST,RequestMethod.GET})
     public Result selectByNoteId(Activitydetail activitydetail){

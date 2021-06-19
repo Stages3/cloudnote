@@ -37,11 +37,6 @@ public class ActivityController {
         List<Activity> list=activityMapper.findByActivityid(activity.getActivityid());
         if(list.size()>0){
             session.setAttribute("sendActivityid",list.get(0));
-        }else {
-            Activity activity1=new Activity();
-            activity1.setActivityid(activity.getActivityid());
-            list.add(0,activity1);
-            session.setAttribute("sendNoteList",list);
         }
         Result res=Result.success("success",list);
         return res;

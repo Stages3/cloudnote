@@ -12,6 +12,10 @@
         select * from activitydetail where activityid=#{activityid}
     </select>
 
+    <select id="selectByActivityId" resultType="com.yc.cloudnote.bean.Activitydetail">
+        select * from activitydetail where noteactivityid=#{noteactivityid}
+    </select>
+
     <select id="selectByNoteId" resultType="com.yc.cloudnote.bean.Activitydetail">
         select * from activitydetail where noteid=#{noteid}
     </select>

@@ -12,6 +12,9 @@ public interface IActivityDetailMapper {
     @Select("select * from activitydetail where activityid=#{activityid}")
     List<Activitydetail> selectByActivityId(int activityid);
 
+    @Select("select * from activitydetail where noteactivityid=#{noteactivityid}")
+    List<Activitydetail> selectByNoteActivityId(int noteactivityid);
+
     @Select("select * from activitydetail where noteid=#{noteid}")
     List<Activitydetail> selectByNoteId(int noteid);
 
