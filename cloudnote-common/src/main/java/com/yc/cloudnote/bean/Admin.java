@@ -8,8 +8,13 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Date;
 
+/**
+ * @description: cr-user
+ * @author: 赵俊华
+ * @create: 2021-05-19 19:11
+ */
 @Data
 @Table
 @Entity
@@ -32,4 +37,5 @@ public class Admin implements Serializable {
     private String education;
     private String profession;
     private String job;
+
 }
