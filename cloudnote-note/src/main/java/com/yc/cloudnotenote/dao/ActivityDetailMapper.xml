@@ -16,4 +16,8 @@
         select * from activitydetail where noteid=#{noteid}
     </select>
 
+<!--    <update id="updateup" parameterType="com.yc.cloudnote.bean.Activitydetail">-->
+<!--        update activitydetail set noteactivityup=noteactivityup+1 where noteactivityid=#{noteactivityid}-->
+<!--    </update>-->
+
 </mapper>

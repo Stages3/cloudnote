@@ -2,6 +2,7 @@ package com.yc.cloudnotenote.controller;
 
 import com.yc.cloudnote.bean.Activity;
 import com.yc.cloudnote.bean.Activitydetail;
+import com.yc.cloudnote.bean.Note;
 import com.yc.cloudnote.bean.Notebook;
 import com.yc.cloudnotenote.dao.IActivityDetailMapper;
 import com.yc.cloudnotenote.dao.IActivityMapper;
@@ -34,7 +35,14 @@ public class ActivityController {
     public Result findByActivityid(Activity activity,HttpSession session){
 
         List<Activity> list=activityMapper.findByActivityid(activity.getActivityid());
-        session.setAttribute("sendActivityid",list.get(0));
+        if(list.size()>0){
+            session.setAttribute("sendActivityid",list.get(0));
+        }else {
+            Activity activity1=new Activity();
+            activity1.setActivityid(activity.getActivityid());
+            list.add(0,activity1);
+            session.setAttribute("sendNoteList",list);
+        }
         Result res=Result.success("success",list);
         return res;
 

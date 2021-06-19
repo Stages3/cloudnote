@@ -132,8 +132,9 @@
             },
             getActivityDetail:function (){
 
-                axios.get("http://127.0.0.1/cloudnote-note/findByActivityid?activityid="+this.activityid).then(res=>{
+                axios.get("cloudnote-note/findByActivityid?activityid="+this.activityid).then(res=>{
                     if(res.data.data!=null){
+                        alert("aaaa");
                         this.details=res.data.data;
                         location.href="activity_detail.html?activityid="+this.activityid;
                     }else{

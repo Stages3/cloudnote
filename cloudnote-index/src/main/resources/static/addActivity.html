@@ -65,11 +65,11 @@
             getnoteid:function (event){
                 this.noteid=event.currentTarget.getAttribute("value");
                 console.log("noteid",event.currentTarget.getAttribute("value"));
-                // this.notetitle1=event.currentTarget.getAttribute("name");
-                // console.log(event.currentTarget.getAttribute("name"));
+                this.notetitle1=event.currentTarget.getAttribute("name");
+                console.log("notetitle",event.currentTarget.getAttribute("name"));
                 // this.notebody=event.currentTarget.getAttribute("body");
                 // console.log(event.currentTarget.getAttribute("body"));
-                return this.noteid;
+                return this.noteid,this.notetitle1;
             },
             getnotes:function () {
                 axios.get("cloudnote-note/findBynotebookid?notebookid="+this.notebookid).then(response=>{
@@ -91,6 +91,7 @@
                         // params.append("noteid",this.noteid);
                         // params.append("noteactivitytitle",this.notetitle1);
                         // params.append("noteactivitybody",this.notebody);
+
                         axios.post("cloudnote-note/shareByNoteId").then(res=>{
                             if(res.data.code==1){
                                 location.href="activity_detail.html";

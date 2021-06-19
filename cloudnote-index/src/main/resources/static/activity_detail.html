@@ -91,13 +91,15 @@
 			<div class="module" data-toggle="niceScroll">
 				<div class="chat-contact">
 					<div class="contact-body">
-						<ul class="contacts-list" v-for="activity in activities" @click="getactivity">
+						<ul class="contacts-list" v-for="activity in activities" @click="getactivity" >
 
-							<li class="online" :value="activity.noteid" @click="getnoteid"><a ><i class="fa fa-file-text-o"  title="online" rel="tooltip-bottom" >{{activity.noteactivitytitle}}</i>
+							<li class="online"  :value="activity.noteid" @click="getnoteid">
+								<a :value="activity.noteactivityid"  @click="getnaid">
+								<i class="fa fa-file-text-o"  title="online" rel="tooltip-bottom" >{{activity.noteactivitytitle}}</i>
 
-								<button type="button" class="btn btn-default btn-xs btn_position_3 btn_up"><i class="fa fa-thumbs-o-up"></i>
+								<button type="button" class="btn btn-default btn-xs btn_position_3 btn_up" @click="addup"><i class="fa fa-thumbs-o-up"></i>
 								</button>
-								<button type="button" class="btn btn-default btn-xs btn_position_2 btn_down"><i class="fa fa-thumbs-o-down"></i>
+								<button type="button" class="btn btn-default btn-xs btn_position_2 btn_down" @click="adddown"><i class="fa fa-thumbs-o-down"></i>
 								</button>
 								<button type="button" class="btn btn-default btn-xs btn_position btn_like"><i class="fa fa-star-o"></i>
 								</button></a></li>
@@ -180,7 +182,8 @@
 			activities:[],
 			addflag: false,
 			noteid:0,
-			notes:[]
+			notes:[],
+			noteactivityid:0
 		},
 		created() {
 			// alert("aaa");
@@ -203,6 +206,11 @@
 				console.log("noteid",event.currentTarget.getAttribute("value"));
 				return this.noteid;
 			},
+			getnaid:function (event) {
+				this.noteactivityid=event.currentTarget.getAttribute("value");
+				console.log("noteactivityid",event.currentTarget.getAttribute("value"));
+				return this.noteactivityid;
+			},
 			showadd:function () {
 				location.href="addActivity.html"
 			},
@@ -210,6 +218,22 @@
 				axios.get("cloudnote-note/findByNoteid?noteid="+this.noteid).then(res1=>{
 					if(res1.data.code==1){
 						this.notes=res1.data.data;
+					}
+				})
+			},
+			addup:function () {
+				axios.get("cloudnote-note/updateup?noteactivityid="+this.noteactivityid).then(res=>{
+					if(res.data.code==1){
+						alert("点赞成功");
+
+					}
+				})
+
+			},
+			adddown:function () {
+				axios.get("cloudnote-note/updatedown?noteactivityid="+this.noteactivityid).then(res=>{
+					if(res.data.code==1){
+						alert("踩一踩");
 					}
 				})
 			}
