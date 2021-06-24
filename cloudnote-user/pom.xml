@@ -60,7 +60,7 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.yc</groupId>
+			<groupId>org.yc</groupId>
 			<artifactId>cloudnote-common</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>

@@ -79,42 +79,32 @@
                         <!-- valifation types -->
                         <!-- ============================================================== -->
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="card">
+                            <div id="card" class="card">
                                 <h5 class="card-header">活动表单</h5>
                                 <div class="card-body">
                                     <form id="validationform" data-parsley-validate="" novalidate="">
                                         <div class="form-group row">
                                             <label class="col-12 col-sm-3 col-form-label text-sm-right">活动标题</label>
                                             <div class="col-12 col-sm-8 col-lg-6">
-                                                <input type="text" required="" placeholder="" class="form-control">
+                                                <input type="text" required="" placeholder="" class="form-control" v-model="title">
                                             </div>
                                         </div>
-                                        <div class="card-body">
-                                            <h5>开始时间</h5>
-                                            <div class="form-group">
-                                                <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-                                                    <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" />
-                                                    <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
-                                                        <div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
-                                                    </div>
-                                                </div>
+                                        <div class="form-group row">
+                                            <label class="col-12 col-sm-3 col-form-label text-sm-right">Digits</label>
+                                            <div class="col-12 col-sm-8 col-lg-6">
+                                                <input data-parsley-type="digits" type="text" required="" placeholder="yyyy-mm-dd" class="form-control" v-model="begtime">
                                             </div>
                                         </div>
-                                        <div class="card-body "><!--border-top:分隔栏-->
-                                            <h5>截止时间</h5>
-                                            <div class="form-group">
-                                                <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
-                                                    <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker2" />
-                                                    <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
-                                                        <div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
-                                                    </div>
-                                                </div>
+                                        <div class="form-group row">
+                                            <label class="col-12 col-sm-3 col-form-label text-sm-right">Number</label>
+                                            <div class="col-12 col-sm-8 col-lg-6">
+                                                <input data-parsley-type="number" type="text" required="" placeholder="Enter only numbers" class="form-control" v-model="endtime">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-12 col-sm-3 col-form-label text-sm-right">活动介绍</label>
                                             <div class="col-12 col-sm-8 col-lg-6">
-                                                <textarea required="" class="form-control"></textarea>
+                                                <textarea required="" class="form-control" v-model="body"></textarea>
                                             </div>
                                         </div>
 <!--                                        <div class="form-group">-->
@@ -123,7 +113,7 @@
 <!--                                        </div>-->
                                         <div class="form-group row text-right">
                                             <div class="col col-sm-10 col-lg-9 offset-sm-1 offset-lg-0">
-                                                <button type="submit" class="btn btn-space btn-primary">发布</button>
+                                                <button type="submit" class="btn btn-space btn-primary" @click.prevent="add">发布</button>
                                                 <button class="btn btn-space btn-secondary">取消</button>
                                             </div>
                                         </div>
@@ -171,9 +161,9 @@
     <script src="assets/vendor/parsley/parsley.js"></script>
     <script src="assets/libs/js/main-js.js"></script>
     <!--后续添加的获取系统时间的组件-->
-    <script src="../assets/vendor/datepicker/moment.js"></script>
-    <script src="../assets/vendor/datepicker/tempusdominus-bootstrap-4.js"></script>
-    <script src="../assets/vendor/datepicker/datepicker.js"></script>
+    <script src="assets/vendor/datepicker/moment.js"></script>
+    <script src="assets/vendor/datepicker/tempusdominus-bootstrap-4.js"></script>
+    <script src="assets/vendor/datepicker/datepicker.js"></script>
     <script>
     $('#form').parsley();
     </script>
@@ -196,6 +186,36 @@
             });
         }, false);
     })();
+    </script>
+
+    <script>
+        var v = new Vue({
+            el: "#card",
+            data:{
+                title:"",
+                body:"",
+                begtime:"",
+                endtime:""
+            },
+            methods:{
+                add(){
+                    alert("begtime:"+this.begtime+"title:"+this.title+"body:"+this.body);
+                    let url = "cloudnote-note/addActivity";
+                    let params = new URLSearchParams();
+                    params.append("title",this.title);
+                    params.append("body",this.body);
+                    params.append("begtime",this.begtime);
+                    params.append("endtime",this.endtime);
+                    axios.post(url,params).then(res=>{
+                       if(res.data.code==0){
+                           alert("插入失败");
+                       } else{
+                           alert("插入成功");
+                       }
+                    });
+                }
+            }
+        });
     </script>
 </body>
  
