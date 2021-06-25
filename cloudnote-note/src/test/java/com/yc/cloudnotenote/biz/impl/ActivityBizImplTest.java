@@ -18,7 +18,7 @@ public class ActivityBizImplTest {
     @Test
     public void TestAddAc(){
         Activity activity = new Activity();
-        activity.setActivitytitle("javaee测试第二次");
+        activity.setActivitytitle("javaee测试第三次");
         activity.setActivitybody("Java EE 是 J2EE的一个新的名称，之所以改名，目的还是让大家清楚J2EE只是Java企业应用。");
 
         Timestamp timestamp0  = new Timestamp(System.currentTimeMillis());
@@ -37,7 +37,7 @@ public class ActivityBizImplTest {
 
     @Test
     public void TestFindByTitle(){
-        Activity activity = activityBiz.findByTitle("javaee测试");
+        Activity activity = activityBiz.findByTitle("javaee测试第三次");
         System.out.println("查询："+activity);
     }
 

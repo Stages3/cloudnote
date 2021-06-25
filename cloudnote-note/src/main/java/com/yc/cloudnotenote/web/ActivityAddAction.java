@@ -25,22 +25,16 @@ public class ActivityAddAction {
 
         activity.setActivitytitle(request.getParameter("title"));
         activity.setActivitybody(request.getParameter("body"));
-//        String time = request.getParameter("begtime");
-//        System.out.println(time);
-//        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        Date begtime = null;
-//        Date endtime = null;
-//        try {
-//            begtime = dateFormat.parse(request.getParameter("begtime"));
-//            endtime = dateFormat.parse(request.getParameter("begtime"));
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//        activity.setActivitybegtime(new Timestamp(begtime.getTime()));
-//        activity.setActivityendtime(new Timestamp(begtime.getTime()));
-        //activity.s
+        activity.setActivitybegtime(activity.getDeliveryTime());
         System.out.println("前端测试："+activity);
         Result result = Result.success("success",activityBiz.addActive(activity));
         return result;
+    }
+
+    @RequestMapping(value = "findActivity",method = {RequestMethod.GET,RequestMethod.POST})
+    public Result findActivity(HttpServletRequest request,Activity activity){
+        String title = request.getParameter("title");
+        activity = activityBiz.findByTitle(title);
+        return Result.success("success",activity);
     }
 }
