@@ -3,9 +3,7 @@ package com.yc.cloudnote.bean;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
@@ -14,12 +12,13 @@ import java.io.Serializable;
  * @author:
  * @create: 2021-06-05 16:32
  */
-
-@Data
-@Table
 @Entity
+@Data
 public class User implements Serializable {
+
+
     @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)  //设置自增
     private Integer userid;
     @NotEmpty(message = "请输入用户名")
     @Length(min = 1,max = 20,message = "账号必须1~20个字符之间")
@@ -31,4 +30,6 @@ public class User implements Serializable {
     private String usernick;
     private String useremail;
     private Integer userstatus;
+
+
 }
