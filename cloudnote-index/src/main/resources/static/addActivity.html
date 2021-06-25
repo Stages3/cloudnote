@@ -14,7 +14,7 @@
             <h4 >选择参加活动的笔记本</h4>
             <select v-model="notebookname" @click="getnotes">
 
-                <option  v-for="book in books" :value="book.notebookid" @click="getnotebookid"  >{{book.notebookname}}</option>
+                <option  v-for="book in books" v-if="book.notebookstatus==0" :value="book.notebookid" @click="getnotebookid"  >{{book.notebookname}}</option>
             </select>
         </div>
 

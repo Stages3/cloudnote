@@ -35,18 +35,8 @@ public class NoteBookController {
     }
 
     @RequestMapping(value = "insertNoteBook",method = {RequestMethod.POST,RequestMethod.GET})
-    public Result insert(Notebook nb, HttpServletRequest request,HttpSession session){
-        ServletContext application =session.getServletContext();
+    public Result insert(Notebook nb,HttpSession session){
 
-        int userid=Integer.parseInt(request.getParameter("userid"));
-        String notebook_name=request.getParameter("notebookname");
-        String notebook_desc=request.getParameter("notebookdesc");
-        nb.setUserid(userid);
-        nb.setNotebookname(notebook_name);
-        nb.setNotebookdesc(notebook_desc);
-//        System.out.println(userid+notebook_name);
-//        System.out.println(application.getAttribute("notebookname"));
-//        System.out.println(application.getAttribute("notebook_name"));
         Result res=Result.success("success",dao.insert(nb));
         return res;
 
@@ -54,8 +44,23 @@ public class NoteBookController {
 
     @RequestMapping (value = "deleteNotebookById",method = {RequestMethod.POST,RequestMethod.GET})
     public Result deleteNotebookById(Notebook nb,HttpServletRequest request){
-
         int result=dao.deleteNotebookById(nb.getNotebookid());
+        Result res=Result.success("success",result);
+        return res;
+    }
+
+    @RequestMapping (value = "updatestatus",method = {RequestMethod.POST,RequestMethod.GET})
+    public Result updatestatus(Notebook nb){
+        nb.setNotebookstatus(1);
+        int result=dao.updatestatus(nb);
+        Result res=Result.success("success",result);
+        return res;
+    }
+
+    @RequestMapping (value = "updatestatus1",method = {RequestMethod.POST,RequestMethod.GET})
+    public Result updatestatus1(Notebook nb){
+        nb.setNotebookstatus(0);
+        int result=dao.updatestatus(nb);
         Result res=Result.success("success",result);
         return res;
     }

@@ -97,13 +97,14 @@
 								<a :value="activity.noteactivityid"  @click="getnaid">
 								<i class="fa fa-file-text-o"  title="online" rel="tooltip-bottom" >{{activity.noteactivitytitle}}</i>
 
-								<button type="button" :placeholder="activity.noteactivityup" class="btn btn-default btn-xs btn_position_3 btn_up" @click="addup">
+								<button type="button" :placeholder="activity.noteactivityup" class="btn btn-default btn-xs btn_position_3 btn_up" @click="addup(false)">
 									<i class="fa fa-thumbs-o-up">{{activity.noteactivityup}}</i>
 								</button>
-								<button type="button"  :placeholder="activity.noteactivitydown" class="btn btn-default btn-xs btn_position_2 btn_down" @click="adddown">
+								<button type="button"  :placeholder="activity.noteactivitydown" class="btn btn-default btn-xs btn_position_2 btn_down" @click="adddown(false)">
 									<i class="fa fa-thumbs-o-down">{{activity.noteactivitydown}}</i>
 								</button>
-								<button type="button" class="btn btn-default btn-xs btn_position btn_like"><i class="fa fa-star-o"></i>
+								<button type="button" class="btn btn-default btn-xs btn_position btn_like" @click="shoucang">
+									<i class="fa fa-star-o"></i>
 								</button></a></li>
 
 						</ul>
@@ -132,7 +133,7 @@
 					<div class="contact-body clear_margin" id="content_body" >
 						<h4><strong>笔记标题: </strong>{{note.notetitle}}</h4>
 						<!-- 填写笔记内容 -->
-						<h4><strong>笔记内容: </strong>{{note.notebody}}</h4>
+						<h4 v-html="note.notebody"><strong>笔记内容: </strong></h4>
 					</div>
 				</div>
 			</div>
@@ -186,7 +187,8 @@
 			noteid:0,
 			notes:[],
 			noteactivityid:0,
-			noteavtivity:[]
+			noteavtivity:[],
+			up:false
 		},
 		created() {
 			// alert("aaa");
@@ -229,19 +231,35 @@
 				// 	}
 				// })
 			},
-			addup:function () {
-				axios.get("cloudnote-note/updateup?noteactivityid="+this.noteactivityid).then(res=>{
-					if(res.data.code==1){
-						alert("点赞成功");
-						location.href="http://127.0.0.1/activity_detail.html"
-					}
-				})
+			addup:function (flag) {
+				if(this.up==false){
+					axios.get("cloudnote-note/updateup?noteactivityid="+this.noteactivityid).then(res=>{
+						if(res.data.code==1){
+							alert("点赞成功");
+							location.href="http://127.0.0.1/activity_detail.html"
+							this.up=true;
+						}
+					})
+				}else{
+					alert("已赞");
+					location.href="http://127.0.0.1/activity_detail.html"
+				}
+
 
 			},
 			adddown:function () {
 				axios.get("cloudnote-note/updatedown?noteactivityid="+this.noteactivityid).then(res=>{
 					if(res.data.code==1){
 						alert("踩一踩");
+						location.href="http://127.0.0.1/activity_detail.html"
+					}
+				})
+			},
+			shoucang:function () {
+				alert("aaaa")
+				axios.post("cloudnote-note/shoucang").then(res=>{
+					if(res.data.code==1){
+						alert("收藏至默认收藏本")
 						location.href="http://127.0.0.1/activity_detail.html"
 					}
 				})
