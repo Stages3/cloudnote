@@ -25,6 +25,8 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 	<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/lang/summernote-zh-CN.js"></script>
+	<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>
 </head>
 <body class="animated fadeIn" id="cloudnote">
@@ -80,7 +82,7 @@
 			<div class="module"  >
 				<div class="chat-contact" >
 					<div class="contact-body" >
-						<ul  class="contacts-list" v-for="book in books" @click="findBynotebookid">
+						<ul  class="contacts-list" v-for="book in books" @click="findBynotebookid" v-if="book.notebookstatus==0" >
 							<!--									<li class="online" >-->
 							<!--										<a class='checked'>-->
 							<!--											<i class="fa fa-book" title="online" rel="tooltip-bottom"></i> {{book.notebookname}}-->
@@ -91,7 +93,7 @@
 <!---->
 							<li id="notebook_id" class="online"  :value="book.notebookid" @click="getbookid">
 								<a class='unchecked'  >
-									<i id="notebook"  :value="book.notebookid" class="fa fa-file-text-o"  title="online" rel="tooltip-bottom"  ></i> {{book.notebookname}}
+									<i id="notebook"  :value="book.notebookid" class="fa fa-file-text-o"  title="online" rel="tooltip-bottom" ></i> {{book.notebookname}}
 									<button type="button" class="btn btn-default btn-xs btn_position btn_delete" @click="deletenotebook"><i class="fa fa-times"></i></button>
 								</a>
 							</li>
@@ -103,17 +105,18 @@
 				</div>
 			</div>
 		</aside>
-		<!--				<div class="row clear_margin">-->
-		<!--					<div class="col-xs-4 click" id='rollback_button' title='回收站'><i class='fa fa-trash-o' style='font-size:20px;line-height:31px;'></i></div>-->
-		<!--					<div class="col-xs-4 click" id='like_button' title='收藏笔记本'><i class='fa fa-star' style='font-size:20px;line-height:31px;'></i></div>-->
-		<!--					<div class="col-xs-4 click" id='action_button' title='参加活动笔记'><i class='fa fa-users' style='font-size:20px;line-height:30px;'></i></div>-->
-		<!--				</div>-->
+						<div class="row clear_margin">
+							<div class="col-xs-4 click" id='rollback_button' title='回收站' @click="recover"><i class='fa fa-trash-o' style='font-size:20px;line-height:31px;'></i></div>
+							<div class="col-xs-4 click" id='like_button' title='收藏笔记'><i class='fa fa-star' style='font-size:20px;line-height:31px;'></i></div>
+							<div class="col-xs-4 click" id='action_button' title='已分享笔记'><i class='fa fa-users' style='font-size:20px;line-height:30px;'></i></div>
+						</div>
 	</div>
 
 	<!-- 全部笔记 -->
 	<div class="col-xs-3" style='padding:0;' id='pc_part_2'>
 		<div class="pc_top_second" id='notebookId'>
 			<h3>全部笔记</h3>
+
 			<button type="button" class="btn btn-default btn-xs btn_plus" id='add_note' @click="addnote"><i class="fa fa-plus"></i></button>
 		</div>
 		<aside class="side-right" id='second_side_right'>
@@ -143,11 +146,11 @@
 				</div>
 			</div>
 		</aside>
-		<div class="row clear_margin">
-			<div class="col-xs-4 click" id='rollback_button' title='回收站'><i class='fa fa-trash-o' style='font-size:20px;line-height:31px;'></i></div>
-			<div class="col-xs-4 click" id='like_button' title='收藏笔记本'><i class='fa fa-star' style='font-size:20px;line-height:31px;'></i></div>
-			<div class="col-xs-4 click" id='action_button' title='参加活动笔记'><i class='fa fa-users' style='font-size:20px;line-height:30px;'></i></div>
-		</div>
+<!--		<div class="row clear_margin">-->
+<!--			<div class="col-xs-4 click" id='rollback_button' title='回收站'><i class='fa fa-trash-o' style='font-size:20px;line-height:31px;'></i></div>-->
+<!--			<div class="col-xs-4 click" id='like_button' title='收藏笔记本'><i class='fa fa-star' style='font-size:20px;line-height:31px;'></i></div>-->
+<!--			<div class="col-xs-4 click" id='action_button' title='参加活动笔记'><i class='fa fa-users' style='font-size:20px;line-height:30px;'></i></div>-->
+<!--		</div>-->
 	</div>
 
 	<!-- 回收站笔记 -->
@@ -238,7 +241,7 @@
 					<h3>编辑笔记</h3>
 				</div>
 				<div class="col-xs-3">
-					<button type="button" class="btn btn-block btn-sm btn-primary" id='save_note' @click="sharenote()">保存笔记</button>
+					<button type="button" class="btn btn-block btn-sm btn-primary" id='save_note' @click="updateNote">保存笔记</button>
 				</div>
 			</div>
 		</div>
@@ -246,27 +249,31 @@
 			<div class="module" data-toggle="niceScroll">
 				<div class="chat-contact">
 					<div class="contact-body clear_margin" v-for="content in contents">
+
 						<!--- 笔记标题 --->
 						<div class="row" >
 							<div class="col-xs-8" >
-								<input type="text" class="form-control" id="input_note_title" :placeholder='content.notetitle'  >
+								<input type="text" v-model="notetitle" class="form-control" id="input_note_title" :placeholder='content.notetitle'  >
 							</div>
 						</div>
-						<!--- 笔记标题 --->
+
 						<div class="row" >
 							<!--- 输入框 --->
 							<div id="div1" >
-								<p v-html="content.notebody"></p>
+								<p  v-html="content.notebody" ></p>
 							</div>
 
 						</div>
+
+<!--						<textarea id="summernote"  name="notebody"  ></textarea>-->
+
 						<div class="row" >笔记状态：
 							<div class="col-xs-8" v-if="content.notestatus===0">未分享</div>
-							<div class="col-xs-8" v-else-if="content.notestatus==1">审核中</div>
-							<div class="col-xs-8" v-else-if="content.notestatus==2">已分享</div>
+							<div class="col-xs-8" v-else-if="content.notestatus===1">审核中</div>
+							<div class="col-xs-8" v-else-if="content.notestatus===2">已分享</div>
 						</div>
 
-						<!--							<textarea id="summernote"  name="notebody"   v-html="content.notebody"></textarea>-->
+
 					</div>
 				</div>
 			</div>
@@ -336,11 +343,18 @@
 </script>
 
 <script src="../js/wangEditors.js"></script>
-<script>
+<script type="text/javascript">
 
 	const E = window.wangEditor
 	const editor = new E('#div1')
+	editor.config.uploadImgShowBase64 = true;
+
+	editor.config.onchange = function (newHtml) {
+		console.log('change 之后最新的 html', newHtml)
+	}
+	console.log(editor.txt.text())
 	editor.create()
+
 	// $(document).ready(function() {
 	// 	$('#summernote').summernote({
 	// 		placeholder: 'Hello stand alone ui',
@@ -355,11 +369,11 @@
 		el: "#center",
 		data: {
 
-
 			books: [],
 			notes: [],
 			contents:[],
-
+			notetitle: '',
+			notebody:'',
 			notebookid: 0,
 			noteid: 0,
 			notestatus: 0
@@ -369,7 +383,6 @@
 		created(){
 			axios.get("cloudnote-note/findAllNoteBook").then(res=>{
 				this.books=res.data.data;
-
 			})
 
 
@@ -408,8 +421,18 @@
 					}
 				});
 			},
-			sharenote:function (){
-				location.href="updatenote.html"
+			updateNote:function (){
+				var params=new URLSearchParams();
+				params.append("notetitle",this.notetitle);
+				params.append("notebody",this.notebody);
+				axios.post("cloudnote-note/updateNote?noteid="+this.noteid,params).then(res=>{
+					if(res.data.code==1){
+						alert("保存成功")
+						location.href="http://127.0.0.1"
+					}
+				})
+
+				// location.href="wangEditor.html"
 			},
 
 			getActivity:function (){
@@ -423,13 +446,18 @@
 				// location.href="alert_note.html?notebookid="+this.notebookid
 				location.href="demo.html"
 			},
+			recover:function () {
+				location.href="recoverbook.html"
+			},
+
+
 			deletenotebook: function (){
-				axios.post("cloudnote-note/deleteNotebookById?notebookid="+this.notebookid).then(res=>{
+				axios.post("cloudnote-note/updatestatus?notebookid="+this.notebookid).then(res=>{
 					if(res.data.code==1){
-						alert("删除成功");
+						alert("回收成功");
 						location.href="http://127.0.0.1/";
 					}else{
-						alert("删除失败");
+						alert("回收失败");
 					}
 				})
 			},
@@ -447,5 +475,18 @@
 		}
 	});
 </script>
+
+<style>
+	.w-e-toolbar {
+		z-index: 2!important;
+	}
+	.w-e-menu {
+		z-index: 2 !important;
+	}
+	.w-e-text-container {
+		z-index: 1 !important;
+	}
+</style>
+
 </body>
 </html>

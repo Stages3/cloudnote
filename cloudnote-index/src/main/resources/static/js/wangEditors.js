@@ -3,7 +3,7 @@ const SINA_URL_PATH = 'http://img.t.sinajs.cn/t4/appstyle/expression/ext/normal'
 
 // const E = window.wangEditor
 // const editor = new E('#div1');
-// // 或者 const editor = new E( document.getElementById('div1') )
+// 或者 const editor = new E( document.getElementById('div1') )
 // // 配置字体
 // editor.config.fontNames = [
 //     // 对象形式 v4.6.16

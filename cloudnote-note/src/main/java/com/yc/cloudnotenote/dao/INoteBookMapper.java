@@ -27,6 +27,10 @@ public interface INoteBookMapper {
     @Update("update notebook set notebookname=#{notebookname},notebookdesc=#{notebookdesc} where notebookid=#{notebookid}")
     int update(Notebook notebook);
 
+    @Update("update notebook set notebookstatus=#{notebookstatus} where notebookid=#{notebookid}")
+    int updatestatus(Notebook notebook);
+
+
     //DELETE FROM notebook WHERE notebookid=7
     @Delete("delete from notebook where notebookid=#{notebookid}")
     int deleteNotebookById(int notebookid);

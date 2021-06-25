@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>回收站</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="x-pjax-version" content="v173">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/favico-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/favico-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/favico-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="ico/favico-57-precomposed.png">
+    <link rel="shortcut icon" href="ico/favico.png">
+    <!--        <link rel="shortcut icon" href="ico/favico.ico">-->
+    <link rel="shortcut icon" href="#" />
+    <link rel="stylesheet" href="styles/icon.css"/>
+    <link rel="stylesheet" href="styles/main.css"/>
+    <!-- Google-Code代码高亮CSS -->
+    <link rel="stylesheet" href="styles/prettify.css"/>
+    <!--		&lt;!&ndash; Ueditor编辑器CSS &ndash;&gt;-->
+    <!--		<link href="styles/umeditor.min.css" type="text/css" rel="stylesheet">-->
+    <script src="/webjars/vue/2.5.16/dist/vue.min.js"></script>
+    <script src="/webjars/axios/0.21.1/dist/axios.min.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>
+</head>
+<body class="animated fadeIn" id="cloudnote">
+
+
+<header class="header">
+    <div class="header-brand">
+        <a data-pjax=".content-body" href="index.html">
+            <img class="brand-logo" src="images/dummy/8986f28e.stilearn-logo.png" alt="Stilearn Admin Sample Logo">
+        </a>
+    </div>
+    <div class="header-profile">
+        <div class="profile-nav">
+            <span class="profile-username">Leo</span>
+            <a class="dropdown-toggle" data-toggle="dropdown">
+                <span class="fa fa-angle-down"></span>
+            </a>
+            <ul class="dropdown-menu animated flipInX pull-right" role="menu">
+                <li><a href="change_password.html"><i class="fa fa-user"></i> 修改密码</a></li>
+                <li class="divider"></li>
+                <li><a id="logout" href="#" ><i class="fa fa-sign-out"></i> 退出登录</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<!-- 全部笔记本 -->
+<div class="row" style='padding:0;' id='center'>
+    <!-- alert_background-->
+    <div class="opacity_bg" style='display:none'></div>
+    <!-- alert_notebook -->
+    <div id="can"></div>
+    <div class="col-xs-2" style='padding:0;' id='pc_part_1'>
+        <!-- side-right -->
+        <div class="pc_top_first" type="button"   >
+            <h3 >全部笔记本</h3>
+
+        </div>
+        <!--				data-toggle="niceScroll"-->
+        <aside class="side-right" id='first_side_right'>
+            <div class="module"  >
+                <div class="chat-contact" >
+                    <div class="contact-body" >
+                        <ul  class="contacts-list" v-for="book in books" @click="findBynotebookid" v-if="book.notebookstatus==1" >
+                            <!--									<li class="online" >-->
+                            <!--										<a class='checked'>-->
+                            <!--											<i class="fa fa-book" title="online" rel="tooltip-bottom"></i> {{book.notebookname}}-->
+                            <!--										</a>-->
+
+                            <!--									</li>v-if="showid" v-model="notebookid"-->
+
+                            <!---->
+                            <li id="notebook_id" class="online"  :value="book.notebookid" @click="getbookid">
+                                <a class='unchecked'  >
+                                    <i id="notebook"  :value="book.notebookid" class="fa fa-file-text-o"  title="online" rel="tooltip-bottom" >
+                                    </i> {{book.notebookname}}
+                                    <button type="button" class="btn btn-default btn-xs btn_position btn_delete" @click="huanyuan"><i class="fa fa-times"></i></button>
+                                    <button type="button" class="btn btn-default btn-xs btn_position btn_delete" @click="deletenotebook">
+                                        <i class="fa fa-times"></i></button>
+                                </a>
+                            </li>
+
+
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <!-- 全部笔记 -->
+    <div class="col-xs-3" style='padding:0;' id='pc_part_2'>
+        <div class="pc_top_second" id='notebookId'>
+            <h3>全部笔记</h3>
+
+            <!--      <button type="button" class="btn btn-default btn-xs btn_plus" id='add_note' @click="addnote"><i class="fa fa-plus"></i></button>-->
+        </div>
+        <aside class="side-right" id='second_side_right'>
+            <div class="module" data-toggle="niceScroll">
+                <div class="chat-contact" >
+                    <div class="contact-body">
+                        <ul class="contacts-list" v-for="note in notes" @click="findByNoteid" >
+
+                            <!---->
+                            <li class="online" :value="note.noteid" @click="getnoteid">
+                                <a class='checked' :value="note.notestatus" @click="getnotestatus">
+                                    <i class="fa fa-file-text-o"  title="online" rel="tooltip-bottom" ></i>
+                                    {{note.notetitle}}
+                                    <button type="button" class="btn btn-default btn-xs btn_position btn_slide_down"   @click="deleteNote()" ><i class="fa fa-chevron-down"></i></button>
+                                </a>
+
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <!--		<div class="row clear_margin">-->
+        <!--			<div class="col-xs-4 click" id='rollback_button' title='回收站'><i class='fa fa-trash-o' style='font-size:20px;line-height:31px;'></i></div>-->
+        <!--			<div class="col-xs-4 click" id='like_button' title='收藏笔记本'><i class='fa fa-star' style='font-size:20px;line-height:31px;'></i></div>-->
+        <!--			<div class="col-xs-4 click" id='action_button' title='参加活动笔记'><i class='fa fa-users' style='font-size:20px;line-height:30px;'></i></div>-->
+        <!--		</div>-->
+    </div>
+
+
+
+    <!-- 编辑笔记 -->
+    <div class="col-sm-7" id='pc_part_3'>
+        <!-- side-right -->
+        <div class="pc_top_third">
+            <div class="row">
+                <div class="col-xs-9">
+                    <h3>编辑笔记</h3>
+                </div>
+                <div class="col-xs-3">
+                    <button type="button" class="btn btn-block btn-sm btn-primary" id='save_note' @click="sharenote()">保存笔记</button>
+                </div>
+            </div>
+        </div>
+        <aside class="side-right" id='third_side_right'>
+            <div class="module" data-toggle="niceScroll">
+                <div class="chat-contact">
+                    <div class="contact-body clear_margin" v-for="content in contents">
+                        <!--- 笔记标题 --->
+                        <div class="row" >
+                            <div class="col-xs-8" >
+                                <input type="text" class="form-control" id="input_note_title" :placeholder='content.notetitle'  >
+                            </div>
+                        </div>
+                        <!--- 笔记标题 --->
+                        <div class="row" >
+                            <!--- 输入框 --->
+                            <div id="div1" >
+                                <p v-html="content.notebody"></p>
+                            </div>
+
+                        </div>
+
+
+                        <!--							<textarea id="summernote"  name="notebody"   v-html="content.notebody"></textarea>-->
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+
+</div>
+
+<footer>
+    <p>&copy; 2014 Stilearning</p>
+    <div style='position:absolute;top:5PX;height:30px;right:20px;line-height:26px;border:1px solid #0E7D76;display:none;background:#fff'>
+        <strong style='color:#0E7D76;margin:0 10px;'></strong>
+    </div>
+</footer>
+
+
+
+<script type="text/javascript">
+    //加载DOM之后处理页面高度
+    function get_dom(e){
+        return document.getElementById(e);
+    }
+    function set_height(){
+        var pc_height=window.innerHeight;
+        pc_height=pc_height-132;
+        get_dom('first_side_right').style.height=(pc_height-31)+'px';
+        get_dom('second_side_right').style.height=pc_height+'px';
+        get_dom('four_side_right').style.height=pc_height+'px';
+        get_dom('sixth_side_right').style.height=pc_height+'px';
+        get_dom('seventh_side_right').style.height=pc_height+'px';
+        get_dom('eighth_side_right').style.height=pc_height+'px';
+        get_dom('third_side_right').style.height=(pc_height-15)+'px';
+        get_dom('fifth_side_right').style.height=(pc_height-15)+'px';
+    }
+    function myEditorWidth(){
+        var dom=get_dom('third_side_right');
+        var style=dom.currentStyle||window.getComputedStyle(dom, null);
+        get_dom('myEditor').style.width=style.width;
+    }
+    set_height();
+    //改变窗口大小时调整页面尺寸
+    window.onresize=function(){
+        set_height();
+        var width=$('#third_side_right').width()-35;
+        $('.edui-container,.edui-editor-body').width(width);
+        $('#myEditor').width(width-20);
+    };
+</script>
+
+<script src="../js/wangEditors.js"></script>
+<script>
+
+    const E = window.wangEditor
+    const editor = new E('#div1')
+    editor.create()
+    // $(document).ready(function() {
+    // 	$('#summernote').summernote({
+    // 		placeholder: 'Hello stand alone ui',
+    // 		lang: "zh-CN",
+    // 		height: 300
+    //
+    // 	})
+    // });
+
+
+    let v=new Vue({
+        el: "#center",
+        data: {
+
+
+            books: [],
+            notes: [],
+            contents:[],
+
+            notebookid: 0,
+            noteid: 0,
+            notestatus: 0
+
+
+        },
+        created(){
+            axios.get("cloudnote-note/findAllNoteBook").then(res=>{
+                this.books=res.data.data;
+            })
+
+
+        },
+        methods:{
+            getnotestatus:function (event){
+                this.notestatus=event.currentTarget.getAttribute("value");
+                console.log(event.currentTarget.getAttribute("value"));
+                return this.notestatus;
+            },
+            getbookid:function (event){
+                this.notebookid=event.currentTarget.getAttribute("value");
+                console.log(event.currentTarget.getAttribute("value"));
+                return this.notebookid;
+            },
+            getnoteid:function (event){
+                this.noteid=event.currentTarget.getAttribute("value");
+                console.log(event.currentTarget.getAttribute("value"));
+                return this.noteid;
+            },
+
+
+            findBynotebookid: function (){
+                axios.get("cloudnote-note/findBynotebookid?notebookid="+this.notebookid).then(response=>{
+                    if(response.data.code==1) {
+                        this.notes=response.data.data;
+                    }
+                });
+            },
+            findByNoteid: function (){
+                axios.get("cloudnote-note/findByNoteid?noteid="+this.noteid).then(response=>{
+                    if(response.data.code==1) {
+                        // this.placeholder=response.data.data.notebody;
+                        // console.log(this.placeholder);
+                        this.contents=response.data.data;
+                    }
+                });
+            }
+
+        }
+    });
+</script>
+</body>
+</html>

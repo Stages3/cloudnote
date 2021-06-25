@@ -13,27 +13,28 @@
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/lang/summernote-zh-CN.js"></script>
 </head>
 <body>
-<div id="summer">
-    <form method="post" enctype=multipart/form-data action="/cloudnote-note/insertNote" >
 
-        <tr>
-            <td>userid</td>
-            <td><input type="text" id="userid" name="userid"/></td>
-        </tr>
+<div id="summer" >
+    <form method="post" enctype=multipart/form-data action="/cloudnote-note/updateNote" >
+
         <br/>
+        <div v-for="note in contents">
         <tr>
             <td>notetitle</td>
-            <td><input type="text" id="notetitle" name="notetitle"/></td>
+            <td><input type="text" id="notetitle" :placeholder='note.notetitle' name="notetitle"/></td>
         </tr>
         <br/>
+        </div>
 
-            <textarea id="summernote"  name="notebody" ></textarea>
+
+        <textarea id="summernote"  name="notebody" ></textarea>
 
 
         <input type="submit" value="保存"  >
     </form>
 
 </div>
+
 <script>
 
     $(document).ready(function() {
@@ -45,17 +46,37 @@
     });
 
 </script>
-    <style scoped>
-        #editor_view >>> .btn {
-            border-color: darkgrey;
-        }
-        #editor_view >>> .dropdown-toggle::after {
-            display: none;
-        }
 
-        #editor_view >>> .note-toolbar {
-            border-bottom: 1px solid darkgrey;
+<script>
+    let v=new Vue({
+        el:"#summer",
+        data:{
+            contents:[]
+        },
+        create(){
+            alert("aaaa")
+            axios.get("cloudnote-note/findByNoteid1").then(response=>{
+                if(response.data.code==1) {
+                    // this.placeholder=response.data.data.notebody;
+                    // console.log(this.placeholder);
+                    this.contents=response.data.data;
+                }
+            });
         }
-    </style>
+    })
+</script>
+
+<style scoped>
+    #editor_view >>> .btn {
+        border-color: darkgrey;
+    }
+    #editor_view >>> .dropdown-toggle::after {
+        display: none;
+    }
+
+    #editor_view >>> .note-toolbar {
+        border-bottom: 1px solid darkgrey;
+    }
+</style>
 </body>
 </html>

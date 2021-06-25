@@ -25,7 +25,13 @@ public interface INoteMapper {
     @Update("update note set notestatus=#{notestatus} where noteid=#{noteid}")
     int update(Note note);
 
+    @Update("update note set notetitle=#{notetitle},notebody=#{notebody},notelastmodifytime=#{notelastmodifytime} where noteid=#{noteid}")
+    int updatenote(Note note);
+
     //DELETE FROM note WHERE noteid=4 notebookid=#{notebookid}
     @Delete("delete from note where noteid=#{noteid}")
     int delete(int noteid);
+
+    @Delete("delete from note where notebookid=#{notebookid}")
+    int deleteByNoteBookId(int notebookid);
 }

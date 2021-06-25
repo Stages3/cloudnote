@@ -3,11 +3,13 @@ package com.yc.cloudnotenote.controller;
 import com.yc.cloudnote.bean.Activity;
 import com.yc.cloudnote.bean.Activitydetail;
 import com.yc.cloudnote.bean.Note;
+import com.yc.cloudnote.bean.Share;
 import com.yc.cloudnotenote.dao.IActivityDetailMapper;
 import com.yc.cloudnotenote.dao.INoteMapper;
 import com.yc.cloudnote.enums.NoteStatusEnum;
 import com.yc.cloudnote.vo.Result;
 
+import com.yc.cloudnotenote.dao.IShareMapper;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import javax.annotation.Resource;
 
 import javax.servlet.http.HttpSession;
+import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 
@@ -26,6 +29,9 @@ public class ActivityDetailController {
 
     @Resource
     private INoteMapper noteMapper;
+
+    @Resource
+    private IShareMapper ShapeMapper;
 
     @RequestMapping(value = "selectByActivityId",method = {RequestMethod.POST,RequestMethod.GET})
     public Result selectByActivityId(@SessionAttribute(required = false) Activity sendActivityid, HttpSession session){
@@ -78,6 +84,15 @@ public class ActivityDetailController {
     @RequestMapping(value = "updatedown",method = {RequestMethod.GET,RequestMethod.POST})
     public Result updatedown(Activitydetail activitydetail){
         int result=detailMapper.updatedown(activitydetail);
+        Result res=Result.success("success",result);
+        return res;
+    }
+
+    @RequestMapping(value = "shoucang",method = {RequestMethod.GET,RequestMethod.POST})
+    public Result shoucang(Share share,@SessionAttribute(required = false) Note sendNoteid){
+        share.setSharetitle(sendNoteid.getNotetitle());
+        share.setNoteid(sendNoteid.getNoteid());
+        int result=ShapeMapper.share(share);
         Result res=Result.success("success",result);
         return res;
     }

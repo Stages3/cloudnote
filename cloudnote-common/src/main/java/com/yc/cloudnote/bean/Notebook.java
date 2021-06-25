@@ -18,6 +18,7 @@ public class Notebook implements Serializable {
     private String notebookname;
     private String notebookdesc;
     private Timestamp notebookcreatetime;
+    private Integer notebookstatus;
 
 //    @OneToOne
 //    @JoinColumn(name="userid")
