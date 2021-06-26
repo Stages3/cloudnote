@@ -10,8 +10,12 @@ public interface UserDao extends JpaRepository<User,Integer> {
     //定义登录查询的方法
     User findByUsernameAndUserpassword(String username,String userpassword);
 
+    User findByUsername(String username);
 
-    //定义注册用户的方法
+
+
+
+
 
 
 }

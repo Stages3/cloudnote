@@ -7,6 +7,7 @@ import com.yc.cloudnote.vo.Result;
 import com.yc.cloudnoteuser.biz.UserBiz;
 
 import com.yc.cloudnoteuser.dao.UserDao;
+import com.yc.cloudnoteuser.util.NoteResult;
 import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +50,47 @@ public class UserAction {
     }
 
     /***
+     * 修改密码的方法
+     */
+    @PostMapping("/change.do")
+    public @ResponseBody
+    NoteResult<Object> updata (
+            @RequestParam String userName,
+            @RequestParam String last_password,
+            @RequestParam String final_password,
+            User user){
+        //返回结果
+        NoteResult<Object> result=new NoteResult<Object>();
+        user.setUsername(userName);
+        User user1=userDao.findByUsername(userName);
+        //获得原密码
+        String user_password = user1.getUserpassword();
+        //对传入的密码需加密才能比较
+
+        System.out.println(user_password);
+        System.out.println(last_password);
+        System.out.println(final_password);
+        //进行比较 密码不相等的话
+        if(!user_password.equals(last_password)) {
+            result.setStatus(1);
+            result.setMsg("原密码不正确");
+            return result;
+        }else if(user_password.equals(final_password)) {
+            result.setStatus(2);
+            result.setMsg("要修改的密码与原密码一致");
+            return result;
+        }else{
+            //密码正确，执行修改密码操作
+            user1.setUserpassword(final_password);
+            userDao.save(user1);
+            result.setStatus(0);
+            result.setMsg("修改密码成功");
+            return result;
+        }
+    }
+
+
+    /***
      * 登录方法
      */
 
@@ -60,7 +102,7 @@ public class UserAction {
         try {
             User dbuser = userBiz.login(user);
             session.setAttribute("loginedAdmin", dbuser);
-            return Result.success("登录成功！", errors.getFieldErrors());
+            return Result.success("登录成功！",user);
         } catch (BizException e) {
             e.printStackTrace();
             //自定义的验证失败信息

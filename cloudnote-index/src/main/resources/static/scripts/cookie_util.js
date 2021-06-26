@@ -20,13 +20,7 @@ function cookie(name){
 
  
 
-/*function delCookie(name)//删除cookie
 
-{
-
-   document.cookie = name+"=;expires="+(new Date(0)).toGMTString();
-
-}*/
 
 
 

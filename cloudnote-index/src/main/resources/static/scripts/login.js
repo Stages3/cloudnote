@@ -36,7 +36,9 @@ function checkLogin(){
 				//result是服务器返回的JSON结果
 				if (result.code==1) { //登录成功
 					//将用户信息保存到Cookie
-					//***********************************************
+					var userName=result.data.username;
+					addCookie("userName",userName,2);
+
 					window.location.href="" +
 						"index.html";
 				}else if(result.code==0){
