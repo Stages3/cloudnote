@@ -37,10 +37,14 @@ class CloudnoteNoteApplicationTests {
 //		activitydetail.setNoteactivityup();
 //		detailMapper.updateup(activitydetail);
 //		detailMapper.updatedown(activitydetail);
-		Share share=new Share();
-		share.setSharetitle("测试");
-		share.setNoteid(1);
-		shareMapper.share(share);
+//		Share share=new Share();
+//		share.setSharetitle("测试");
+//		share.setNoteid(1);
+//		shareMapper.share(share);
+//
+//
+		shareMapper.findbyuserid(1);
+		noteMapper.findByNoteid(1);
 	}
 
 	@Test

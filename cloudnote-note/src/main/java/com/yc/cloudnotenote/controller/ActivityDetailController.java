@@ -92,6 +92,7 @@ public class ActivityDetailController {
     public Result shoucang(Share share,@SessionAttribute(required = false) Note sendNoteid){
         share.setSharetitle(sendNoteid.getNotetitle());
         share.setNoteid(sendNoteid.getNoteid());
+        share.setUserid(sendNoteid.getUserid());
         int result=ShapeMapper.share(share);
         Result res=Result.success("success",result);
         return res;

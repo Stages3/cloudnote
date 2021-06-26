@@ -107,7 +107,7 @@
 		</aside>
 						<div class="row clear_margin">
 							<div class="col-xs-4 click" id='rollback_button' title='回收站' @click="recover"><i class='fa fa-trash-o' style='font-size:20px;line-height:31px;'></i></div>
-							<div class="col-xs-4 click" id='like_button' title='收藏笔记'><i class='fa fa-star' style='font-size:20px;line-height:31px;'></i></div>
+							<div class="col-xs-4 click" id='like_button' title='收藏笔记' @click="collect"><i class='fa fa-star' style='font-size:20px;line-height:31px;'></i></div>
 							<div class="col-xs-4 click" id='action_button' title='已分享笔记'><i class='fa fa-users' style='font-size:20px;line-height:30px;'></i></div>
 						</div>
 	</div>
@@ -448,6 +448,9 @@
 			},
 			recover:function () {
 				location.href="recoverbook.html"
+			},
+			collect:function () {
+				location.href="collectnote.html"
 			},
 
 

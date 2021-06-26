@@ -20,4 +20,5 @@ public class Share {
     private String sharetitle;  //'共享标题',
     private String sharebody;   //'共享内容',
     private Integer noteid;     //'笔记id',
+    private Integer userid;
 }
