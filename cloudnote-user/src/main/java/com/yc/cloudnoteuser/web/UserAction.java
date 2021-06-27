@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -111,6 +112,17 @@ public class UserAction {
             return Result.failure(e.getMessage(), errors.getAllErrors());
         }
     }
+
+    /***
+     * 退出登录方法
+     */
+    @GetMapping("logoutback")
+    public ModelAndView logout(ModelAndView mav, HttpSession session){
+        session.invalidate();
+        mav.setViewName("redirect:http://127.0.0.1/back_login.html");
+        return mav;
+    }
+
 
 
 

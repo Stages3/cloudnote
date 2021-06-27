@@ -28,8 +28,20 @@
 	<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/lang/summernote-zh-CN.js"></script>
 	<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>
+	<script type="text/javascript" src="scripts/cookie_util.js"></script><!-- 引入cookie -->
+	<script type="text/javascript" src="scripts/loginjudge.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			loginjudge();
+
+
+
+		})
+
+	</script>
 </head>
 <body class="animated fadeIn" id="cloudnote">
+
 
 
 <header class="header">
@@ -47,7 +59,7 @@
 			<ul class="dropdown-menu animated flipInX pull-right" role="menu">
 				<li><a href="change_password.html"><i class="fa fa-user"></i> 修改密码</a></li>
 				<li class="divider"></li>
-				<li><a id="logout" href="#" ><i class="fa fa-sign-out"></i> 退出登录</a></li>
+				<li><a id="logout" onclick=delCookie("userName") href="log_in.html"><i class="fa fa-sign-out"></i> 退出登录</a></li>
 			</ul>
 		</div>
 	</div>
@@ -313,6 +325,7 @@
 <script type="text/javascript">
 	//加载DOM之后处理页面高度
 	function get_dom(e){
+
 		return document.getElementById(e);
 	}
 	function set_height(){
@@ -481,6 +494,8 @@
 		}
 	});
 </script>
+
+
 
 <style>
 	.w-e-toolbar {
