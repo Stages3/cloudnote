@@ -55,8 +55,8 @@ public class ActivityDetailController {
     }
 
     @RequestMapping(value = "shareByNoteId",method = {RequestMethod.POST,RequestMethod.GET})
-    public Result shareByNoteId(Note note,@SessionAttribute(required = false) Note sendNoteid, Activitydetail activitydetail, @SessionAttribute(required = false) Activitydetail sendAcid) throws IOException {
-        activitydetail.setActivityid(sendAcid.getActivityid());
+    public Result shareByNoteId(Note note,@SessionAttribute(required = false) Note sendNoteid, @SessionAttribute(required = false) Activity sendActivityid,Activitydetail activitydetail, @SessionAttribute(required = false) Activitydetail sendAcid) throws IOException {
+        activitydetail.setActivityid(sendActivityid.getActivityid());
         activitydetail.setNoteid(sendNoteid.getNoteid());
         activitydetail.setNoteactivitytitle(sendNoteid.getNotetitle());
         activitydetail.setNoteactivitystatus(NoteStatusEnum.NEW.getCode());

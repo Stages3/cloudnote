@@ -43,8 +43,9 @@ public class NoteController {
     }
 
     @RequestMapping(value = "findByNoteid1",method = {RequestMethod.POST,RequestMethod.GET})
-    public Result findByNoteid1( @SessionAttribute(required = false)Note sendNoteid){
+    public Result findByNoteid1( @SessionAttribute(required = false)Note sendNoteid,HttpSession session){
         List<Note> list=dao.findByNoteid(sendNoteid.getNoteid());
+        session.setAttribute("sendNote",list.get(0));
         return Result.success("success",list);
     }
 
@@ -87,13 +88,15 @@ public class NoteController {
         Result res=Result.success("success",result);
         return res;
     }
-    @RequestMapping (value = "updateNote",method = {RequestMethod.POST,RequestMethod.GET})
-    public Result updateNote(Note n, HttpServletResponse response) throws IOException {
+    @RequestMapping (value = "updateNote1",method = {RequestMethod.POST,RequestMethod.GET})
+    public Result updateNote(Note n, HttpServletResponse response,@SessionAttribute(required = false)Note sendNote) throws IOException {
         n.setNotelastmodifytime(n.getDeliverytime());
-        int result=dao.deleteByNoteBookId(n.getNotebookid());
+        n.setNoteid(sendNote.getNoteid());
+        int result=dao.updatenote(n);
         Result res=Result.success("success",result);
         if(res.getCode()==1){
             try {
+
                 response.sendRedirect("http://127.0.0.1/");
             } catch (IOException e) {
                 e.printStackTrace();
