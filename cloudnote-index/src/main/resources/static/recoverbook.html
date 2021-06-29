@@ -309,6 +309,7 @@
                   axios.post("cloudnote-note/deleteNotebookById?notebookid="+this.notebookid).then(res1=>{
                       if(res1.data.code==1){
                           alert("删除成功")
+                        location.href="http://127.0.0.1/recoverbook.html"
                       }
                   })
               }
