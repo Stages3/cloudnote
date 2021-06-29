@@ -21,7 +21,7 @@
 							<div class="form-group">
 <!--                                <label class="col-sm-3 control-label" for="input" style='margin-top:5px;'>笔记本名称</label>-->
                                 <div class="col-sm-8">
-									<input type="text" class="form-control" id="user_id" v-model="userid"><br/><br/>
+<!--									<input type="text" class="form-control" id="user_id" v-model="userid"><br/><br/>-->
                                     <input type="text" class="form-control" id="notebook_name" v-model="notebookname"><br/><br/>
 									<input type="text" class="form-control" id="notebook_desc" v-model="notebookdesc">
                                 </div>
@@ -40,7 +40,7 @@
 					el:"#modalBasic",
 					data:{
 						notebookname: "",
-						userid: 1,
+						// userid: 1,
 						notebookdesc:""
 
 					},
@@ -50,7 +50,7 @@
 						},
 						addNotebook:function (){
 							let params=new URLSearchParams();
-							params.append("userid",this.userid);
+							// params.append("userid",this.userid);
 							params.append("notebookname",this.notebookname);
 							params.append("notebookdesc",this.notebookdesc);
 							axios.post("cloudnote-note/insertNoteBook",params).then(response=>{

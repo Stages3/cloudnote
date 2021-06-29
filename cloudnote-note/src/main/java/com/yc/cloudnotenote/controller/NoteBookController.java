@@ -63,8 +63,16 @@ public class NoteBookController {
      * @return
      */
     @RequestMapping(value = "insertNoteBook",method = {RequestMethod.POST,RequestMethod.GET})
-    public Result insert(Notebook nb, Cookie cookie){
-//        cookie.getValue();
+    public Result insert(Notebook nb, List<Cookie> cookies,int userid){
+        if (cookies != null && !cookies.isEmpty()) {
+            for (int i = 0; i < cookies.size(); i++) {
+                Cookie cookie = cookies.get(i);
+                if (cookie.getName().equalsIgnoreCase("userId")){
+                    userid=Integer.parseInt(cookie.getValue());
+                }
+            }
+        }
+        nb.setUserid(userid);
         Result res=Result.success("success",dao.insert(nb));
         return res;
 

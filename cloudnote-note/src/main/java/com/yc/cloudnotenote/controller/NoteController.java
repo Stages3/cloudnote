@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletContext;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -88,9 +89,19 @@ public class NoteController {
      * @throws IOException
      */
     @RequestMapping(value = "insertNote",method = {RequestMethod.POST,RequestMethod.GET})
-    public Result insert(Note nb, HttpServletResponse response, @SessionAttribute(required = false)Note sendNoteList,@SessionAttribute(required = false) User loginedUser) throws IOException {
-        nb.setUserid(loginedUser.getUserid());
-        nb.setUsername(loginedUser.getUsername());
+    public Result insert(Note nb, HttpServletResponse response, @SessionAttribute(required = false)Note sendNoteList,List<Cookie> cookies,int userid,String username) throws IOException {
+        if (cookies != null && !cookies.isEmpty()) {
+            for (int i = 0; i < cookies.size(); i++) {
+                Cookie cookie = cookies.get(i);
+                if (cookie.getName().equalsIgnoreCase("userId")){
+                    userid=Integer.parseInt(cookie.getValue());
+                }else if(cookie.getName().equalsIgnoreCase("userName")){
+                    username=cookie.getValue();
+                }
+            }
+        }
+        nb.setUserid(userid);
+        nb.setUsername(username);
         nb.setNotebookid(sendNoteList.getNotebookid());
         nb.setNotestatus(NoteStatusEnum.NEW.getCode());
         nb.setNotelastmodifytime(nb.getDeliverytime());
