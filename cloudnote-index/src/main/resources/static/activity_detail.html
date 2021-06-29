@@ -97,10 +97,10 @@
 								<a :value="activity.noteactivityid"  @click="getnaid">
 								<i class="fa fa-file-text-o"  title="online" rel="tooltip-bottom" >{{activity.noteactivitytitle}}</i>
 
-								<button type="button" :placeholder="activity.noteactivityup" class="btn btn-default btn-xs btn_position_3 btn_up" @click="addup(false)">
+								<button type="button" :placeholder="activity.noteactivityup" class="btn btn-default btn-xs btn_position_3 btn_up" @click="addup(up)">
 									<i class="fa fa-thumbs-o-up">{{activity.noteactivityup}}</i>
 								</button>
-								<button type="button"  :placeholder="activity.noteactivitydown" class="btn btn-default btn-xs btn_position_2 btn_down" @click="adddown(false)">
+								<button type="button"  :placeholder="activity.noteactivitydown" class="btn btn-default btn-xs btn_position_2 btn_down" @click="adddown(down)">
 									<i class="fa fa-thumbs-o-down">{{activity.noteactivitydown}}</i>
 								</button>
 								<button type="button" class="btn btn-default btn-xs btn_position btn_like" @click="shoucang">
@@ -188,7 +188,8 @@
 			notes:[],
 			noteactivityid:0,
 			noteavtivity:[],
-			up:false
+			up:false,
+			down:false
 		},
 		created() {
 			// alert("aaa");
@@ -236,9 +237,13 @@
 					axios.get("cloudnote-note/updateup?noteactivityid="+this.noteactivityid).then(res=>{
 						if(res.data.code==1){
 							alert("点赞成功");
+
 							location.href="http://127.0.0.1/activity_detail.html"
-							this.up=true;
+
 						}
+						this.up=true;
+						return this.up;
+
 					})
 				}else{
 					alert("已赞");
@@ -247,13 +252,22 @@
 
 
 			},
-			adddown:function () {
-				axios.get("cloudnote-note/updatedown?noteactivityid="+this.noteactivityid).then(res=>{
-					if(res.data.code==1){
-						alert("踩一踩");
-						location.href="http://127.0.0.1/activity_detail.html"
-					}
-				})
+			adddown:function (flag) {
+				if(this.down==false){
+					axios.get("cloudnote-note/updatedown?noteactivityid="+this.noteactivityid).then(res=>{
+						if(res.data.code==1){
+							alert("踩一踩");
+
+							location.href="http://127.0.0.1/activity_detail.html"
+						}
+						this.down=true;
+						return this.down;
+					})
+				}else{
+					alert("已踩");
+					location.href="http://127.0.0.1/activity_detail.html";
+				}
+
 			},
 			shoucang:function () {
 				alert("aaaa")

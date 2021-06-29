@@ -11,7 +11,9 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 //@RequestMapping()
@@ -63,16 +65,18 @@ public class NoteBookController {
      * @return
      */
     @RequestMapping(value = "insertNoteBook",method = {RequestMethod.POST,RequestMethod.GET})
-    public Result insert(Notebook nb, List<Cookie> cookies,int userid){
-        if (cookies != null && !cookies.isEmpty()) {
-            for (int i = 0; i < cookies.size(); i++) {
-                Cookie cookie = cookies.get(i);
-                if (cookie.getName().equalsIgnoreCase("userId")){
-                    userid=Integer.parseInt(cookie.getValue());
+    public Result insert(Notebook nb, HttpServletRequest request){
+        Cookie [] cookies=request.getCookies();
+        if(cookies!=null){
+//            Arrays.stream(cookies)
+//                    .map(c -> c.getName() + "=" + c.getValue())
+//                    .collect(Collectors.joining(", "));
+            for(Cookie c:cookies){
+                if(c.getName().equals("userId")){
+                    nb.setUserid(Integer.parseInt(c.getValue()));
                 }
             }
         }
-        nb.setUserid(userid);
         Result res=Result.success("success",dao.insert(nb));
         return res;
 

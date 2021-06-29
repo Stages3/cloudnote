@@ -89,19 +89,22 @@ public class NoteController {
      * @throws IOException
      */
     @RequestMapping(value = "insertNote",method = {RequestMethod.POST,RequestMethod.GET})
-    public Result insert(Note nb, HttpServletResponse response, @SessionAttribute(required = false)Note sendNoteList,List<Cookie> cookies,int userid,String username) throws IOException {
-        if (cookies != null && !cookies.isEmpty()) {
-            for (int i = 0; i < cookies.size(); i++) {
-                Cookie cookie = cookies.get(i);
-                if (cookie.getName().equalsIgnoreCase("userId")){
-                    userid=Integer.parseInt(cookie.getValue());
-                }else if(cookie.getName().equalsIgnoreCase("userName")){
-                    username=cookie.getValue();
+    public Result insert(Note nb, HttpServletResponse response,HttpServletRequest request, @SessionAttribute(required = false)Note sendNoteList) throws IOException {
+
+        Cookie [] cookies=request.getCookies();
+        if(cookies!=null){
+//            Arrays.stream(cookies)
+//                    .map(c -> c.getName() + "=" + c.getValue())
+//                    .collect(Collectors.joining(", "));
+            for(Cookie c:cookies){
+                if(c.getName().equals("userId")){
+                    nb.setUserid(Integer.parseInt(c.getValue()));
+                }
+                if(c.getName().equals("userName")){
+                    nb.setUsername(c.getValue());
                 }
             }
         }
-        nb.setUserid(userid);
-        nb.setUsername(username);
         nb.setNotebookid(sendNoteList.getNotebookid());
         nb.setNotestatus(NoteStatusEnum.NEW.getCode());
         nb.setNotelastmodifytime(nb.getDeliverytime());

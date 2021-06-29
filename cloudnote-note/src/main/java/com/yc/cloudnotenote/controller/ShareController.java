@@ -25,8 +25,8 @@ public class ShareController {
      * @return
      */
     @RequestMapping(value = "findbyuserid",method = {RequestMethod.POST,RequestMethod.GET})
-    public Result findbyuserid(Share share, @SessionAttribute(required = false)User loginedUser){
-        List<Share> list=shareMapper.findbyuserid(loginedUser.getUserid());
+    public Result findbyuserid(Share share){
+        List<Share> list=shareMapper.findbyuserid(share.getUserid());
         return Result.success("success",list);
     }
 
