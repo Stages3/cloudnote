@@ -2,6 +2,7 @@ package com.yc.cloudnotenote.controller;
 
 import com.yc.cloudnote.bean.Notebook;
 import com.yc.cloudnote.bean.User;
+import com.yc.cloudnote.enums.NoteStatusEnum;
 import com.yc.cloudnote.vo.Result;
 import com.yc.cloudnotenote.dao.INoteBookMapper;
 import org.springframework.web.bind.annotation.*;
@@ -77,6 +78,7 @@ public class NoteBookController {
                 }
             }
         }
+        nb.setNotebookstatus(NoteStatusEnum.NEW.getCode());
         Result res=Result.success("success",dao.insert(nb));
         return res;
 

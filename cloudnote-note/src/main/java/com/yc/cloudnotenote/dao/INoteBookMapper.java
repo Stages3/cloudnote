@@ -23,7 +23,7 @@ public interface INoteBookMapper {
 //    @Select("SELECT * FROM notebook JOIN user ON  notebook.`userid`=user.`userid` where ")
 
     //INSERT INTO notebook VALUES(NULL,1,1,'测试3','aaaa','2021-06-04 20:09:16')
-    @Insert("insert into notebook values(default,#{userid},#{notebookname},#{notebookdesc},now())")
+    @Insert("insert into notebook values(default,#{userid},#{notebookname},#{notebookdesc},now(),#{notebookstatus})")
     @Options(useGeneratedKeys = true,keyColumn = "notebookid",keyProperty = "notebookid")
     int insert(Notebook nb);
 
