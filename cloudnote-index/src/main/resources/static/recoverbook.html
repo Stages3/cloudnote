@@ -152,22 +152,31 @@
       <div class="module" data-toggle="niceScroll">
         <div class="chat-contact">
           <div class="contact-body clear_margin" v-for="content in contents">
+
             <!--- 笔记标题 --->
             <div class="row" >
               <div class="col-xs-8" >
-                <input type="text" class="form-control" id="input_note_title" :placeholder='content.notetitle'  >
+                <input type="text" v-model="notetitle" class="form-control" id="input_note_title" :placeholder='content.notetitle'  >
               </div>
             </div>
-            <!--- 笔记标题 --->
+
             <div class="row" >
               <!--- 输入框 --->
               <div id="div1" >
-                <p v-html="content.notebody"></p>
+                <p   v-html="content.notebody" ></p>
               </div>
 
             </div>
+            <!--						<textarea id="text1" v-html="content.notebody"></textarea>?-->
+            <!--						<textarea id="summernote"  name="notebody"  ></textarea>-->
 
-            <!--							<textarea id="summernote"  name="notebody"   v-html="content.notebody"></textarea>-->
+            <div class="row" >笔记状态：
+              <div class="col-xs-8" v-if="content.notestatus===0">未分享</div>
+              <div class="col-xs-8" v-else-if="content.notestatus===1">审核中</div>
+              <div class="col-xs-8" v-else-if="content.notestatus===2">已分享</div>
+            </div>
+
+
           </div>
         </div>
       </div>
@@ -189,6 +198,7 @@
 <script type="text/javascript">
   //加载DOM之后处理页面高度
   function get_dom(e){
+
     return document.getElementById(e);
   }
   function set_height(){
@@ -217,7 +227,6 @@
     $('#myEditor').width(width-20);
   };
 </script>
-
 <script src="../js/wangEditors.js"></script>
 <script>
 
@@ -319,7 +328,7 @@
         axios.post("cloudnote-note/deleteNoteById?noteid="+this.noteid).then(res=>{
           if(res.data.code==1){
             alert("删除成功");
-            location.href="http://127.0.0.1/";
+            location.href="http://127.0.0.1/recoverbook.html"
           }else{
             alert("删除失败");
           }

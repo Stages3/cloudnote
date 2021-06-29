@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 
 import javax.annotation.Resource;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.awt.*;
 import java.io.IOException;
@@ -133,10 +135,21 @@ public class ActivityDetailController {
      * @return
      */
     @RequestMapping(value = "shoucang",method = {RequestMethod.GET,RequestMethod.POST})
-    public Result shoucang(Share share,@SessionAttribute(required = false) Note sendNoteid){
+    public Result shoucang(Share share, HttpServletRequest request ,@SessionAttribute(required = false) Note sendNoteid){
+        Cookie[] cookies=request.getCookies();
+        if(cookies!=null){
+//            Arrays.stream(cookies)
+//                    .map(c -> c.getName() + "=" + c.getValue())
+//                    .collect(Collectors.joining(", "));
+            for(Cookie c:cookies){
+                if(c.getName().equals("userId")){
+                    share.setUserid(Integer.parseInt(c.getValue()));
+                }
+            }
+        }
         share.setSharetitle(sendNoteid.getNotetitle());
         share.setNoteid(sendNoteid.getNoteid());
-        share.setUserid(sendNoteid.getUserid());
+
         int result=ShapeMapper.share(share);
         Result res=Result.success("success",result);
         return res;
