@@ -102,7 +102,7 @@ public class UserAction {
         }
         try {
             User dbuser = userBiz.login(user);
-            session.setAttribute("loginedAdmin", dbuser);
+            session.setAttribute("loginedUser", dbuser);
             return Result.success("登录成功！",user);
         } catch (BizException e) {
             e.printStackTrace();

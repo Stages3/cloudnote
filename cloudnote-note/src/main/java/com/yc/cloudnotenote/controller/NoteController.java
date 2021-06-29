@@ -2,6 +2,7 @@ package com.yc.cloudnotenote.controller;
 
 import com.yc.cloudnote.bean.Note;
 import com.yc.cloudnote.bean.Notebook;
+import com.yc.cloudnote.bean.User;
 import com.yc.cloudnote.enums.NoteStatusEnum;
 import com.yc.cloudnote.vo.Result;
 import com.yc.cloudnotenote.dao.INoteMapper;
@@ -87,7 +88,9 @@ public class NoteController {
      * @throws IOException
      */
     @RequestMapping(value = "insertNote",method = {RequestMethod.POST,RequestMethod.GET})
-    public Result insert(Note nb, HttpServletResponse response, @SessionAttribute(required = false)Note sendNoteList) throws IOException {
+    public Result insert(Note nb, HttpServletResponse response, @SessionAttribute(required = false)Note sendNoteList,@SessionAttribute(required = false) User loginedUser) throws IOException {
+        nb.setUserid(loginedUser.getUserid());
+        nb.setUsername(loginedUser.getUsername());
         nb.setNotebookid(sendNoteList.getNotebookid());
         nb.setNotestatus(NoteStatusEnum.NEW.getCode());
         nb.setNotelastmodifytime(nb.getDeliverytime());

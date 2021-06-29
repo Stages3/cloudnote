@@ -22,12 +22,12 @@ public class NoteBookController {
     /**
      * 通过用户id查询笔记本
      * @param nb
-     * @param loginedAdmin
+     * @param loginedUser
      * @return
      */
     @RequestMapping(value="selectByUserId",method = {RequestMethod.POST,RequestMethod.GET})
-    public Result selectByUserId(Notebook nb, @SessionAttribute(required = false)User loginedAdmin){
-        List<Notebook> list=dao.selectByUserId(loginedAdmin.getUserid());
+    public Result selectByUserId(Notebook nb, @SessionAttribute(required = false)User loginedUser){
+        List<Notebook> list=dao.selectByUserId(loginedUser.getUserid());
         Result res=Result.success("success",list);
         return res;
     }
