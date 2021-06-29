@@ -397,7 +397,7 @@
 
 		},
 		created(){
-			axios.get("cloudnote-note/findAllNoteBook").then(res=>{
+			axios.get("cloudnote-note/selectByUserId").then(res=>{
 				this.books=res.data.data;
 			})
 

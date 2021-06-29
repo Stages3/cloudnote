@@ -1,6 +1,7 @@
 package com.yc.cloudnotenote.controller;
 
 import com.yc.cloudnote.bean.Notebook;
+import com.yc.cloudnote.bean.User;
 import com.yc.cloudnote.vo.Result;
 import com.yc.cloudnotenote.dao.INoteBookMapper;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +20,8 @@ public class NoteBookController {
     private INoteBookMapper dao;
 
     @RequestMapping(value="selectByUserId",method = {RequestMethod.POST,RequestMethod.GET})
-    public Result selectByUserId(Notebook nb, HttpSession session){
-        List<Notebook> list=dao.selectByUserId(nb.getUserid());
+    public Result selectByUserId(Notebook nb, @SessionAttribute(required = false)User loginedAdmin){
+        List<Notebook> list=dao.selectByUserId(loginedAdmin.getUserid());
         Result res=Result.success("success",list);
         return res;
     }
