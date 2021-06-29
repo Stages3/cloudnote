@@ -19,6 +19,12 @@ public class NoteBookController {
     @Resource
     private INoteBookMapper dao;
 
+    /**
+     * 通过用户id查询笔记本
+     * @param nb
+     * @param loginedAdmin
+     * @return
+     */
     @RequestMapping(value="selectByUserId",method = {RequestMethod.POST,RequestMethod.GET})
     public Result selectByUserId(Notebook nb, @SessionAttribute(required = false)User loginedAdmin){
         List<Notebook> list=dao.selectByUserId(loginedAdmin.getUserid());
@@ -27,7 +33,10 @@ public class NoteBookController {
     }
 
 
-
+    /**
+     * 查询所有笔记本
+     * @return
+     */
     @RequestMapping(value = "findAllNoteBook",method = {RequestMethod.POST,RequestMethod.GET})
     public Result findAllNoteBook(){
         List<Notebook> list= dao.findAllNoteBook();
@@ -35,6 +44,12 @@ public class NoteBookController {
         return res;
     }
 
+    /**
+     *添加笔记本
+     * @param nb
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "insertNoteBook",method = {RequestMethod.POST,RequestMethod.GET})
     public Result insert(Notebook nb,HttpSession session){
 
@@ -43,6 +58,12 @@ public class NoteBookController {
 
     }
 
+    /**
+     * 删除笔记本
+     * @param nb
+     * @param request
+     * @return
+     */
     @RequestMapping (value = "deleteNotebookById",method = {RequestMethod.POST,RequestMethod.GET})
     public Result deleteNotebookById(Notebook nb,HttpServletRequest request){
         int result=dao.deleteNotebookById(nb.getNotebookid());
@@ -50,6 +71,11 @@ public class NoteBookController {
         return res;
     }
 
+    /**
+     * 更新笔记本状态
+     * @param nb
+     * @return
+     */
     @RequestMapping (value = "updatestatus",method = {RequestMethod.POST,RequestMethod.GET})
     public Result updatestatus(Notebook nb){
         nb.setNotebookstatus(1);
@@ -58,6 +84,11 @@ public class NoteBookController {
         return res;
     }
 
+    /**
+     *
+     * @param nb
+     * @return
+     */
     @RequestMapping (value = "updatestatus1",method = {RequestMethod.POST,RequestMethod.GET})
     public Result updatestatus1(Notebook nb){
         nb.setNotebookstatus(0);

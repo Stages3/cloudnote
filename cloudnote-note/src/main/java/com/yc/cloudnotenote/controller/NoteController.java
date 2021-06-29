@@ -21,6 +21,12 @@ public class NoteController {
     @Resource
     private INoteMapper dao;
 
+    /**
+     * 通过笔记本id查询笔记
+     * @param note
+     * @param session
+     * @return
+     */
     @RequestMapping(value="findBynotebookid",method = {RequestMethod.POST,RequestMethod.GET})
     public Result findBynotebookid(Note note,HttpSession session){
         List<Note> list=dao.findBynotebookid(note.getNotebookid());
@@ -35,6 +41,12 @@ public class NoteController {
         return Result.success("success",list);
     }
 
+    /**
+     * 通过笔记id查询笔记详情
+     * @param note
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "findByNoteid",method = {RequestMethod.POST,RequestMethod.GET})
     public Result findByNoteid(Note note,HttpSession session){
         List<Note> list=dao.findByNoteid(note.getNoteid());
@@ -42,6 +54,12 @@ public class NoteController {
         return Result.success("success",list);
     }
 
+    /**
+     * 通过session的笔记id查询笔记详情
+     * @param sendNoteid
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "findByNoteid1",method = {RequestMethod.POST,RequestMethod.GET})
     public Result findByNoteid1( @SessionAttribute(required = false)Note sendNoteid,HttpSession session){
         List<Note> list=dao.findByNoteid(sendNoteid.getNoteid());
@@ -49,6 +67,10 @@ public class NoteController {
         return Result.success("success",list);
     }
 
+    /**
+     * 查询所有笔记
+     * @return
+     */
     @RequestMapping("findAllNote")
     public Result findAllNoteBook(){
         List<Note> list= dao.findAllNote();
@@ -56,6 +78,14 @@ public class NoteController {
         return res;
     }
 
+    /**
+     * 添加笔记
+     * @param nb
+     * @param response
+     * @param sendNoteList
+     * @return
+     * @throws IOException
+     */
     @RequestMapping(value = "insertNote",method = {RequestMethod.POST,RequestMethod.GET})
     public Result insert(Note nb, HttpServletResponse response, @SessionAttribute(required = false)Note sendNoteList) throws IOException {
         nb.setNotebookid(sendNoteList.getNotebookid());
@@ -75,6 +105,11 @@ public class NoteController {
 
     }
 
+    /**
+     * 通过笔记id删除笔记
+     * @param n
+     * @return
+     */
     @RequestMapping (value = "deleteNoteById",method = {RequestMethod.POST,RequestMethod.GET})
     public Result deleteNotebookById(Note n){
         int result=dao.delete(n.getNoteid());
@@ -82,12 +117,26 @@ public class NoteController {
         return res;
     }
 
+    /**
+     * 通过笔记本id删除笔记
+     * @param n
+     * @return
+     */
     @RequestMapping (value = "deleteByNoteBookId",method = {RequestMethod.POST,RequestMethod.GET})
     public Result deleteByNoteBookId(Note n){
         int result=dao.deleteByNoteBookId(n.getNotebookid());
         Result res=Result.success("success",result);
         return res;
     }
+
+    /**
+     * 更新笔记
+     * @param n
+     * @param response
+     * @param sendNote
+     * @return
+     * @throws IOException
+     */
     @RequestMapping (value = "updateNote1",method = {RequestMethod.POST,RequestMethod.GET})
     public Result updateNote(Note n, HttpServletResponse response,@SessionAttribute(required = false)Note sendNote) throws IOException {
         n.setNotelastmodifytime(n.getDeliverytime());

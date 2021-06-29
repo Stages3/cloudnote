@@ -24,6 +24,10 @@ public class ActivityController {
     @Resource
     private IActivityDetailMapper activityDetailMapper;
 
+    /**
+     * 查询所有活动
+     * @return
+     */
     @RequestMapping(value = "findAllActivity",method = {RequestMethod.POST,RequestMethod.GET})
     public Result findAllNoteBook(){
         List<Activity> list= activityMapper.findAllActivity();
@@ -31,6 +35,12 @@ public class ActivityController {
         return res;
     }
 
+    /**
+     * 通过活动id查询活动
+     * @param activity
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "findByActivityid",method = {RequestMethod.POST,RequestMethod.GET})
     public Result findByActivityid(Activity activity,HttpSession session){
 

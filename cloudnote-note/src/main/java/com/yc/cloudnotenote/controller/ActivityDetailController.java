@@ -33,6 +33,12 @@ public class ActivityDetailController {
     @Resource
     private IShareMapper ShapeMapper;
 
+    /**
+     * 通过session中的活动id查询活动
+     * @param sendActivityid
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "selectByActivityId",method = {RequestMethod.POST,RequestMethod.GET})
     public Result selectByActivityId(@SessionAttribute(required = false) Activity sendActivityid, HttpSession session){
         List<Activitydetail> list=detailMapper.selectByActivityId(sendActivityid.getActivityid());
@@ -40,6 +46,12 @@ public class ActivityDetailController {
         Result res=Result.success("success",list);
         return res;
     }
+
+    /**
+     * 通过活动详情表的活动id查询活动
+     * @param activitydetail
+     * @return
+     */
     @RequestMapping(value = "selectByNoteActivityId",method = {RequestMethod.POST,RequestMethod.GET})
     public Result selectByNoteActivityId(Activitydetail activitydetail){
         List<Activitydetail> list=detailMapper.selectByNoteActivityId(activitydetail.getNoteactivityid());
@@ -47,6 +59,11 @@ public class ActivityDetailController {
         return res;
     }
 
+    /**
+     * 通过活动详情的笔记id查询note表中对应的笔记
+     * @param activitydetail
+     * @return
+     */
     @RequestMapping(value = "selectByNoteId",method = {RequestMethod.POST,RequestMethod.GET})
     public Result selectByNoteId(Activitydetail activitydetail){
         List<Activitydetail> list=detailMapper.selectByNoteId(activitydetail.getNoteid());
@@ -54,6 +71,17 @@ public class ActivityDetailController {
         return res;
     }
 
+    /**
+     * 分享笔记：更新note表中笔记的状态为 审核中，
+     *          活动详情表中添加对应数据
+     * @param note
+     * @param sendNoteid
+     * @param sendActivityid
+     * @param activitydetail
+     * @param sendAcid
+     * @return
+     * @throws IOException
+     */
     @RequestMapping(value = "shareByNoteId",method = {RequestMethod.POST,RequestMethod.GET})
     public Result shareByNoteId(Note note,@SessionAttribute(required = false) Note sendNoteid, @SessionAttribute(required = false) Activity sendActivityid,Activitydetail activitydetail, @SessionAttribute(required = false) Activitydetail sendAcid) throws IOException {
         activitydetail.setActivityid(sendActivityid.getActivityid());
@@ -74,6 +102,11 @@ public class ActivityDetailController {
         return res;
     }
 
+    /**
+     * 点赞
+     * @param activitydetail
+     * @return
+     */
     @RequestMapping(value = "updateup",method = {RequestMethod.GET,RequestMethod.POST})
     public Result updateup(Activitydetail activitydetail){
         int result=detailMapper.updateup(activitydetail);
@@ -81,6 +114,11 @@ public class ActivityDetailController {
         return res;
     }
 
+    /**
+     * 踩一踩
+     * @param activitydetail
+     * @return
+     */
     @RequestMapping(value = "updatedown",method = {RequestMethod.GET,RequestMethod.POST})
     public Result updatedown(Activitydetail activitydetail){
         int result=detailMapper.updatedown(activitydetail);
@@ -88,6 +126,12 @@ public class ActivityDetailController {
         return res;
     }
 
+    /**
+     * 收藏笔记：添加至默认收藏夹
+     * @param share
+     * @param sendNoteid
+     * @return
+     */
     @RequestMapping(value = "shoucang",method = {RequestMethod.GET,RequestMethod.POST})
     public Result shoucang(Share share,@SessionAttribute(required = false) Note sendNoteid){
         share.setSharetitle(sendNoteid.getNotetitle());
