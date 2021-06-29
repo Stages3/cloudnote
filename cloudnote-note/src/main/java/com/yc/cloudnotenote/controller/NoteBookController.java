@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletContext;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -25,13 +26,24 @@ public class NoteBookController {
      * @param loginedUser
      * @return
      */
-    @RequestMapping(value="selectByUserId",method = {RequestMethod.POST,RequestMethod.GET})
-    public Result selectByUserId(Notebook nb, @SessionAttribute(required = false)User loginedUser){
-        List<Notebook> list=dao.selectByUserId(loginedUser.getUserid());
+//    @RequestMapping(value="selectByUserId",method = {RequestMethod.POST,RequestMethod.GET})
+//    public Result selectByUserId(Notebook nb, @SessionAttribute(required = false)User loginedUser){
+//        List<Notebook> list=dao.selectByUserId(loginedUser.getUserid());
+//        Result res=Result.success("success",list);
+//        return res;
+//    }
+
+    /**
+     * 通过用户id查询笔记本
+     * @param nb
+     * @return
+     */
+    @RequestMapping(value="selectByUserId1",method = {RequestMethod.POST,RequestMethod.GET})
+    public Result selectByUserId1(Notebook nb){
+        List<Notebook> list=dao.selectByUserId(nb.getUserid());
         Result res=Result.success("success",list);
         return res;
     }
-
 
     /**
      * 查询所有笔记本
@@ -47,12 +59,12 @@ public class NoteBookController {
     /**
      *添加笔记本
      * @param nb
-     * @param session
+     * @param
      * @return
      */
     @RequestMapping(value = "insertNoteBook",method = {RequestMethod.POST,RequestMethod.GET})
-    public Result insert(Notebook nb,HttpSession session){
-
+    public Result insert(Notebook nb, Cookie cookie){
+//        cookie.getValue();
         Result res=Result.success("success",dao.insert(nb));
         return res;
 

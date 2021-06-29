@@ -241,7 +241,7 @@
       books: [],
       notes: [],
       contents:[],
-
+      userid:0,
       notebookid: 0,
       noteid: 0,
       notestatus: 0
@@ -249,7 +249,9 @@
 
     },
     created(){
-      axios.get("cloudnote-note/selectByUserId").then(res=>{
+      console.log(getCookie("userId"),getCookie("userName"));
+      this.userid=getCookie("userId");
+      axios.get("cloudnote-note/selectByUserId1?userid="+this.userid).then(res=>{
         this.books=res.data.data;
       })
 

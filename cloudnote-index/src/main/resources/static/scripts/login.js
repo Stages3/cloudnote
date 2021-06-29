@@ -33,10 +33,13 @@ function checkLogin(){
 			dataType:"json",
 
 			success:function(result){
+				alert("aaaa")
 				//result是服务器返回的JSON结果
 				if (result.code==1) { //登录成功
 					//将用户信息保存到Cookie
 					var userName=result.data.username;
+					var userId=result.data.userid;
+					addCookie("userId",userId,2);
 					addCookie("userName",userName,2);
 
 					window.location.href="" +

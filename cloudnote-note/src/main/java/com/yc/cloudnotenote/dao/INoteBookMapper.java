@@ -13,6 +13,10 @@ public interface INoteBookMapper {
     @Select("select * from notebook where userid =  #{userid} ")
     List<Notebook> selectByUserId(int userid);
 
+    //带一个参数查询
+    @Select("select * from notebook where userid =  #{userid} ")
+    List<Notebook> selectByUserId1(Notebook notebook);
+
     @Select("select * from notebook")
     List<Notebook> findAllNoteBook();
 

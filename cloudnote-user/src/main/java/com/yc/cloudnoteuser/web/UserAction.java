@@ -103,7 +103,7 @@ public class UserAction {
         try {
             User dbuser = userBiz.login(user);
             session.setAttribute("loginedUser", dbuser);
-            return Result.success("登录成功！",user);
+            return Result.success("登录成功！",dbuser);
         } catch (BizException e) {
             e.printStackTrace();
             //自定义的验证失败信息
@@ -116,12 +116,12 @@ public class UserAction {
     /***
      * 退出登录方法
      */
-    @GetMapping("logoutback")
-    public ModelAndView logout(ModelAndView mav, HttpSession session){
-        session.invalidate();
-        mav.setViewName("redirect:http://127.0.0.1/back_login.html");
-        return mav;
-    }
+//    @GetMapping("logoutback")
+//    public ModelAndView logout(ModelAndView mav, HttpSession session){
+//        session.invalidate();
+//        mav.setViewName("redirect:http://127.0.0.1/back_login.html");
+//        return mav;
+//    }
 
 
 

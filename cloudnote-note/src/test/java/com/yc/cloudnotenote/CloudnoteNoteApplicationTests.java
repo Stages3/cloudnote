@@ -43,8 +43,12 @@ class CloudnoteNoteApplicationTests {
 //		shareMapper.share(share);
 //
 //
-		shareMapper.findbyuserid(1);
-		noteMapper.findByNoteid(1);
+//		shareMapper.findbyuserid(1);
+//		noteMapper.findByNoteid(1);
+		Notebook notebook=new Notebook();
+		notebook.setUserid(1);
+		System.out.println(noteBookMapper.selectByUserId1(notebook));
+
 	}
 
 	@Test

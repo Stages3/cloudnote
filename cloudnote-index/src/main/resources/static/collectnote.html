@@ -185,7 +185,7 @@
         data:{
             notes:[],
             notes1:[],
-            userid:1,
+            userid:0,
             noteid:0
 
         },
@@ -194,7 +194,8 @@
             // axios.post("cloudnote-notebook/findAllActivity").then(res=>{
             // 	this.activities=res.data.data;?userid="+this.userid
             // })
-            axios.get("cloudnote-note/findbyuserid").then(res=>{
+            this.userid=getCookie("userId");
+            axios.get("cloudnote-note/findbyuserid?userid="+this.userid).then(res=>{
                 if (res.data.data!=null){
                     this.notes=res.data.data;
                 }

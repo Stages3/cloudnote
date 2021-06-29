@@ -25,13 +25,13 @@ public class ShareController {
      * @return
      */
     @RequestMapping(value = "findbyuserid",method = {RequestMethod.POST,RequestMethod.GET})
-    public Result findbyuserid(Share share, @SessionAttribute(required = false) User loginedUser){
+    public Result findbyuserid(Share share, @SessionAttribute(required = false)User loginedUser){
         List<Share> list=shareMapper.findbyuserid(loginedUser.getUserid());
         return Result.success("success",list);
     }
 
     /**
-     * 通过笔记id删除个人收藏夹中的笔记
+     *
      * @param share
      * @return
      */
