@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+
+ 
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link href="assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/libs/css/style.css">
+    <link rel="stylesheet" href="assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
+    <link rel="stylesheet" href="assets/vendor/charts/morris-bundle/morris.css">
+    <link rel="stylesheet" href="assets/vendor/fonts/material-design-iconic-font/css/materialdesignicons.min.css">
+    <title>投稿详情</title>
+
+	<script src="/webjars/vue/2.5.16/dist/vue.min.js"></script>
+	<script src="/webjars/axios/0.21.1/dist/axios.min.js"></script>
+	<script src="js/header.js"></script>
+</head>
+
+<body>
+    <!-- ============================================================== -->
+    <!-- main wrapper -->
+    <!-- ============================================================== -->
+    <div class="dashboard-main-wrapper">
+	    <!-- ============================================================== -->
+	    <!-- navbar -->
+	    <!-- ============================================================== -->
+		<div id="headers">
+			<mininav></mininav>
+			<leftnav></leftnav>
+		</div>
+		<script>
+			var headerVue = new Vue({
+				el:"#headers"
+			});
+		</script>
+	    <!-- ============================================================== -->
+	    <!-- end navbar -->
+	    <!-- ============================================================== -->
+	    <!-- ============================================================== -->
+	    <!-- left sidebar -->
+	    <!-- ============================================================== -->
+
+	    <!-- ============================================================== -->
+	    <!-- end left sidebar -->
+	    <!-- ============================================================== -->
+	    <!-- ============================================================== -->
+	    <!-- wrapper  -->
+	    <!-- ============================================================== -->
+	    <div class="dashboard-wrapper">
+	        <div class="dashboard-influence">
+	            <div id="activitydetail" class="container-fluid dashboard-content">
+	                <!-- ============================================================== -->
+	                <!-- pageheader  -->
+	                <!-- ============================================================== -->
+	                <div class="row">
+	                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+	                        <div class="page-header">
+	                            <h3 class="mb-2">投稿详情</h3>
+
+	                        </div>
+	                    </div>
+	                </div>
+	                <!-- ============================================================== -->
+	                <!-- end pageheader  -->
+	                <!-- ============================================================== -->
+	                <!-- ============================================================== -->
+	                <!-- content  -->
+	                <!-- ============================================================== -->
+	                <!-- ============================================================== -->
+	                <!-- influencer profile  -->
+	                <!-- ============================================================== -->
+	                <div class="row">
+	                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+	                        <div class="card influencer-profile-data">
+	                            <div class="card-body">
+	                                <div class="row">
+
+	                                        <div class="col-xl-10 col-lg-8 col-md-8 col-sm-8 col-12">
+	                                            <div class="user-avatar-info">
+	                                                <div class="m-b-20">
+	                                                    <div class="user-avatar-name">
+	                                                        <h2 class="mb-1">活动：{{activity.activitytitle}}</h2>
+	                                                    </div>
+	                                                    <div class="rating-star  d-inline-block">
+	                                                        <i class="fa fa-fw fa-star"></i>
+	                                                        <i class="fa fa-fw fa-star"></i>
+	                                                        <i class="fa fa-fw fa-star"></i>
+	                                                        <i class="fa fa-fw fa-star"></i>
+	                                                        <i class="fa fa-fw fa-star"></i>
+	                                                        <p class="d-inline-block text-dark">14 Reviews </p>
+	                                                    </div>
+	                                                </div>
+	                                                <!--  <div class="float-right"><a href="#" class="user-avatar-email text-secondary">www.henrybarbara.com</a></div> -->
+<!--	                                                <div class="user-avatar-address">-->
+<!--	                                                    <p class="border-bottom pb-3">-->
+<!--	                                                        <span class="d-xl-inline-block d-block mb-2"><i class="fa fa-map-marker-alt mr-2 text-primary "></i>4045 Denver AvenueLos Angeles, CA 90017</span>-->
+<!--	                                                        <span class="mb-2 ml-xl-4 d-xl-inline-block d-block">Joined date: 23 June, 2018  </span>-->
+<!--	                                                        <span class=" mb-2 d-xl-inline-block d-block ml-xl-4">Male -->
+<!--	                                                                </span>-->
+<!--	                                                        <span class=" mb-2 d-xl-inline-block d-block ml-xl-4">29 Year Old </span>-->
+<!--	                                                    </p>-->
+<!--	                                                    &lt;!&ndash;标签&ndash;&gt;-->
+
+<!--	                                                </div>-->
+	                                            </div>
+	                                        </div>
+	                                    </div>
+	                                </div>
+
+	                            </div>
+	                        </div>
+	                    </div>
+	                    <!-- ============================================================== -->
+	                    <!-- end influencer profile  -->
+	                    <!-- ============================================================== -->
+
+
+	                    <div class="row">
+	                        <!-- ============================================================== -->
+	                        <!-- campaign activities   -->
+	                        <!-- ============================================================== -->
+	                        <div class="col-lg-12">
+	                            <div class="section-block">
+	                                <h3 class="section-title">投稿笔记</h3>
+	                            </div>
+	                            <div class="card">
+	                                <div class="campaign-table table-responsive">
+	                                    <table class="table">
+	                                        <thead>
+	                                            <tr class="border-0">
+	                                                <th class="border-0">编号</th>
+	                                                <th class="border-0">笔记</th>
+	                                                <th class="border-0">笔记作者</th>
+
+	                                                <th class="border-0">状态</th>
+	                                                <th class="border-0">投稿日期</th>
+	                                                <th class="border-0">操作</th>
+	                                            </tr>
+	                                        </thead>
+	                                        <tbody>
+	                                            <tr v-for="detail in details">
+	                                                <td>
+														<span>{{detail.noteactivityid}}</span>
+	                                                </td>
+	                                                <td>{{detail.noteactivitytitle}}</td>
+	                                                <td>
+														<span>{{detail.username}}</span>
+	                                                </td>
+
+	                                                <td>
+														<span v-if="detail.noteactivitystatus==0">正常</span>
+														<span v-else>违规</span>
+													</td>
+	                                                <td>7 Aug,2018</td>
+	                                                <td>
+	                                                    <div class="dropdown float-right">
+	                                                        <a href="#" class="dropdown-toggle card-drop" data-toggle="dropdown" aria-expanded="true">
+	                                                                <i class="mdi mdi-dots-vertical"></i>
+	                                                                     </a>
+	                                                        <div class="dropdown-menu dropdown-menu-right">
+	                                                            <!-- item-->
+	                                                            <a href="javascript:void(0);" class="dropdown-item">Sales Report</a>
+	                                                            <!-- item-->
+	                                                            <a href="javascript:void(0);" class="dropdown-item">Export Report</a>
+	                                                            <!-- item-->
+	                                                            <a href="javascript:void(0);" class="dropdown-item">Profit</a>
+	                                                            <!-- item-->
+	                                                            <a href="javascript:void(0);" class="dropdown-item">Action</a>
+	                                                        </div>
+	                                                    </div>
+	                                                </td>
+	                                            </tr>
+<!--	                                            <tr>-->
+<!--	                                                <td>-->
+<!--	                                                    <div class="m-r-10"><img src="assets/images/mail_chimp.png" alt="user" width="30"></div>-->
+<!--	                                                </td>-->
+<!--	                                                <td>Top Dashboard Sale 2018</td>-->
+<!--	                                                <td>-->
+<!--	                                                    <div class="avatar-group">-->
+<!--	                                                        <span><a href="#"><i class="fab fa-fw fa-facebook-square facebook-color"></i></a></span>-->
+<!--	                                                        <span><a href="#"><i class="fab fa-fw fa-pinterest-square pinterest-color"></i></a></span>-->
+<!--	                                                    </div>-->
+<!--	                                                </td>-->
+<!--	                                                <td>5,50,000 / 6,50,000</td>-->
+<!--	                                                <td>70%</td>-->
+<!--	                                                <td>27 Aug,2018</td>-->
+<!--	                                                <td>-->
+<!--	                                                    <div class="dropdown float-right">-->
+<!--	                                                        <a href="#" class="dropdown-toggle  card-drop" data-toggle="dropdown" aria-expanded="true">-->
+<!--	                                            <i class="mdi mdi-dots-vertical"></i>-->
+<!--	                                        </a>-->
+<!--	                                                        <div class="dropdown-menu dropdown-menu-right">-->
+<!--	                                                            &lt;!&ndash; item&ndash;&gt;-->
+<!--	                                                            <a href="javascript:void(0);" class="dropdown-item">Sales Report</a>-->
+<!--	                                                            &lt;!&ndash; item&ndash;&gt;-->
+<!--	                                                            <a href="javascript:void(0);" class="dropdown-item">Export Report</a>-->
+<!--	                                                            &lt;!&ndash; item&ndash;&gt;-->
+<!--	                                                            <a href="javascript:void(0);" class="dropdown-item">Profit</a>-->
+<!--	                                                            &lt;!&ndash; item&ndash;&gt;-->
+<!--	                                                            <a href="javascript:void(0);" class="dropdown-item">Action</a>-->
+<!--	                                                        </div>-->
+<!--	                                                    </div>-->
+<!--	                                                </td>-->
+<!--	                                            </tr>-->
+	                                        </tbody>
+	                                    </table>
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <!-- ============================================================== -->
+	                        <!-- end campaign activities   -->
+	                        <!-- ============================================================== -->
+	                    </div>
+
+	                                    <!-- ============================================================== -->
+	                                    <!-- end content  -->
+	                                    <!-- ============================================================== -->
+	                                </div>
+	                            </div>
+	                            <!-- ============================================================== -->
+	                            <!-- footer -->
+	                            <!-- ============================================================== -->
+	                            <div class="footer">
+	                                <div class="container-fluid">
+	                                    <div class="row">
+	                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+	                                           
+	                                        </div>
+	                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+	                                            <div class="text-md-right footer-links d-none d-sm-block">
+	                                                <a href="javascript: void(0);">About</a>
+	                                                <a href="javascript: void(0);">Support</a>
+	                                                <a href="javascript: void(0);">Contact Us</a>
+	                                            </div>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                            <!-- ============================================================== -->
+	                            <!-- end footer -->
+	                            <!-- ============================================================== -->
+	                        </div>
+	                        <!-- ============================================================== -->
+	                        <!-- end wrapper  -->
+	                        <!-- ============================================================== -->
+	                    </div>
+	                    <!-- ============================================================== -->
+	                    <!-- end main wrapper  -->
+	                    <!-- ============================================================== -->
+	                    <!-- Optional JavaScript -->
+	                    <!-- jquery 3.3.1 -->
+	                    <script src="assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+	                    <!-- bootstap bundle js -->
+	                    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+	                    <!-- slimscroll js -->
+	                    <script src="assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+	                    <!-- main js -->
+	                    <script src="assets/libs/js/main-js.js"></script>
+	                    <!-- morris-chart js -->
+	                    <script src="assets/vendor/charts/morris-bundle/raphael.min.js"></script>
+	                    <script src="assets/vendor/charts/morris-bundle/morris.js"></script>
+	                    <script src="assets/vendor/charts/morris-bundle/morrisjs.html"></script>
+	                    <!-- chart js -->
+	                    <script src="assets/vendor/charts/charts-bundle/Chart.bundle.js"></script>
+	                    <script src="assets/vendor/charts/charts-bundle/chartjs.js"></script>
+	                    <!-- dashboard js -->
+	                    <script src="assets/libs/js/dashboard-influencer.js"></script>
+<script>
+	var v = new Vue({
+		el:"#activitydetail",
+		data:{
+			details:[],
+			activity:[]
+		},
+		created(){
+			axios.get("cloudnote-note/findDetailByAcId1").then(res=>{
+				this.details = res.data.data;
+			});
+			axios.get("cloudnote-note/findOneActivity").then(res=>{
+				this.activity = res.data.data;
+			})
+		}
+	});
+</script>
+</body>
+ 
+</html>

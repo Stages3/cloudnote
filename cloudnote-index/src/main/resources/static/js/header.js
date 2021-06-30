@@ -154,7 +154,7 @@ Vue.component("leftnav",{
                       <!-- 下拉边框 -->
                         <ul class="navbar-nav flex-column">
                             <li class="nav-divider">
-                                Menu
+                                菜单
                             </li>
                             <li class="nav-item ">
                                 <a class="nav-link active" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-1" aria-controls="submenu-1"><i class="fa fa-fw fa-user-circle"></i>用户管理 <span class="badge badge-success">6</span></a>
@@ -169,9 +169,7 @@ Vue.component("leftnav",{
 										<li class="nav-item">
 										    <a class="nav-link" href="back_influencer-profile.html">用户详情</a>
 										</li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="dashboard-influencer.html">用户模版</a>
-                                        </li>
+                                        
                                         
                                     </ul>
                                 </div>
@@ -181,17 +179,12 @@ Vue.component("leftnav",{
                                 <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-4" aria-controls="submenu-4"><i class="fab fa-fw fa-wpforms"></i>活动管理</a>
                                 <div id="submenu-4" class="collapse submenu" style="">
                                     <ul class="nav flex-column">
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="pages/form-elements.html">Form Elements</a>
-                                        </li>
+                                       
                                         <li class="nav-item">
                                             <a class="nav-link" href="back_activitys.html">活动发布</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="back_activitys_find.html">活动详情</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="pages/datepicker.html">日期选择器</a>
                                         </li>
                                         
                                     </ul>

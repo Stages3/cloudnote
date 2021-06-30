@@ -7,6 +7,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -30,6 +31,20 @@ public class ActivityBizImpl implements ActivityBiz {
         activity.setActivitytitle(activitytitle);
         Example<Activity> example =Example.of(activity);
         Optional<Activity> optional = activityDao.findOne(example);
+        return optional.get();
+    }
+
+    @Override
+    public List<Activity> findAll() {
+        return activityDao.findAll();
+    }
+
+    @Override
+    public Activity findActivityId(Integer activityid) {
+        Activity activity = new Activity();
+        activity.setActivityid(activityid);
+        Example<Activity> example = Example.of(activity);
+        Optional<Activity> optional =  activityDao.findOne(example);
         return optional.get();
     }
 }

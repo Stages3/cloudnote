@@ -11,8 +11,5 @@
         }
     };
 
-    function click(){
-    delCookie("userName");
-    window.location.href="log_in.html";
-    };
+
 

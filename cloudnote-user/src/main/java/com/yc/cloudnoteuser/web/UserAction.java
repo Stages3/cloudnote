@@ -5,16 +5,16 @@ import com.yc.cloudnote.bean.User;
 import com.yc.cloudnote.biz.BizException;
 import com.yc.cloudnote.vo.Result;
 import com.yc.cloudnoteuser.biz.UserBiz;
-
 import com.yc.cloudnoteuser.dao.UserDao;
 import com.yc.cloudnoteuser.util.NoteResult;
-import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
